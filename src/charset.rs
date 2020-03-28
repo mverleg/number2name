@@ -1,7 +1,7 @@
 use ::std::ops::Index;
 use ::std::collections::HashSet;
 use ::std::fmt;
-use std::fmt::{Formatter, Write, Error};
+use std::fmt::{Formatter, Write};
 use crate::encode::number2name;
 use crate::decode::name2number;
 use crate::typ::N2NErr;
