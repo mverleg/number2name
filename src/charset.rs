@@ -1,34 +1,54 @@
 use ::std::ops::Index;
 use ::std::collections::HashSet;
 
+#[derive(Debug, Clone, Copy)]
+pub enum Case {
+    Sensitive,
+    Insensitive,
+}
+
+#[derive(Debug)]
 pub struct Charset {
-    values: Vec<char>
+    values: Vec<char>,
+    case: Case,
 }
 
 impl Charset {
+    pub fn case_sensitive<'a>(data: impl Into<&'a str>) -> Self {
+        Charset::new(data, Case::Sensitive)
+    }
+
+    pub fn case_insensitive<'a>(data: impl Into<&'a str>) -> Self {
+        Charset::new(data, Case::Insensitive)
+    }
+
     /// Panics if the input contains duplicates.
-    pub fn new<'a>(data: impl Into<&'a str>) -> Self {
-        match Charset::try_new(data) {
+    pub fn new<'a>(data: impl Into<&'a str>, case: Case) -> Self {
+        match Charset::try_new(data, case) {
             Some(charset) => charset,
             None => panic!("failed to initialize charset due to duplicate data"),
         }
     }
 
     /// Empty if the input contains duplicates.
-    pub fn try_new<'a>(data: impl Into<&'a str>) -> Option<Self> {
+    pub fn try_new<'a>(data: impl Into<&'a str>, case: Case) -> Option<Self> {
         let data = data.into();
         assert!(data.len() > 0);
         let mut seen = HashSet::new();
         let mut values = Vec::with_capacity(data.len());
         for character in data.chars() {
-            if seen.contains(&character) {
+            let unique_repr = match case {
+                Case::Sensitive => character,
+                Case::Insensitive => character.to_lowercase(),
+            };
+            if seen.contains(&unique_repr) {
                 return None
             }
-            seen.insert(character);
+            seen.insert(unique_repr);
             values.push(character)
         }
         Some(Charset {
-            values
+            values, case
         })
     }
 
@@ -52,18 +72,36 @@ mod tests {
 
     #[test]
     fn valid_charset() {
-        let charset = Charset::try_new("abc");
+        let charset = Charset::try_new("Abc", Case::Insensitive);
         assert!(charset.is_some());
         let charset = charset.unwrap();
         assert_eq!(charset.len(), 3);
-        assert_eq!(charset[0], 'a');
+        assert_eq!(charset[0], 'A');
         assert_eq!(charset[1], 'b');
         assert_eq!(charset[2], 'c');
     }
 
     #[test]
-    fn invalid_charset() {
-        let charset = Charset::try_new("aba");
+    fn valid_case_duplicate() {
+        let charset = Charset::try_new("abBA", Case::Sensitive);
+        assert!(charset.is_some());
+        let charset = charset.unwrap();
+        assert_eq!(charset.len(), 4);
+        assert_eq!(charset[0], 'a');
+        assert_eq!(charset[1], 'b');
+        assert_eq!(charset[2], 'B');
+        assert_eq!(charset[3], 'A');
+    }
+
+    #[test]
+    fn invalid_duplicate() {
+        let charset = Charset::try_new("aba", Case::Insensitive);
+        assert!(charset.is_none());
+    }
+
+    #[test]
+    fn invalid_case_insensitive_duplicate() {
+        let charset = Charset::try_new("abBA", Case::Insensitive);
         assert!(charset.is_none());
     }
 }
