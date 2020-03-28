@@ -3,6 +3,8 @@ use ::std::collections::HashSet;
 use ::std::fmt;
 use std::fmt::{Formatter, Write, Error};
 use crate::encode::number2name;
+use crate::decode::name2number;
+use crate::typ::N2NErr;
 
 #[derive(Debug, Clone, Copy)]
 pub enum Case {
@@ -92,6 +94,10 @@ impl Charset {
 
     pub fn encode(&self, number: u64) -> String {
         number2name(number, &self)
+    }
+
+    pub fn decode<'a>(&self, text: impl Into<&'a str>) -> Result<u64, N2NErr> {
+        name2number(text, &self)
     }
 }
 
