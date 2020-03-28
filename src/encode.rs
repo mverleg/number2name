@@ -24,8 +24,6 @@ mod tests {
     use super::*;
     use crate::Charset;
 
-    //TODO @mark: test close to overflow limit
-
     #[test]
     fn single_char_first() {
         let charset = Charset::case_sensitive("aBcD");
