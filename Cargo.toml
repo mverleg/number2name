@@ -9,3 +9,4 @@ name = "number2name"
 path = "src/lib.rs"
 
 [dependencies]
+lazy_static = "^1.4.0"

@@ -1,5 +1,7 @@
 use ::std::ops::Index;
 use ::std::collections::HashSet;
+use ::std::fmt;
+use std::fmt::{Formatter, Write};
 
 #[derive(Debug, Clone, Copy)]
 pub enum Case {
@@ -7,12 +9,28 @@ pub enum Case {
     Insensitive,
 }
 
-#[derive(Debug)]
 pub struct Charset {
     values: Vec<char>,
     case: Case,
 }
 
+impl fmt::Debug for Charset {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        f.write_str("(")?;
+        f.write_str(match self.case {
+            Case::Sensitive => "case-sensitive",
+            Case::Insensitive => "case-insensitive",
+        })?;
+        f.write_str(" character set: [")?;
+        for character in &self.values {
+            f.write_char(*character);
+        }
+        f.write_str("])")
+    }
+}
+
+/// A character set of unique characters in a specific order.
+/// If case-insensitive, characters must have a single-character lower-case version (can be the same as upper-case).
 impl Charset {
     pub fn case_sensitive<'a>(data: impl Into<&'a str>) -> Self {
         Charset::new(data, Case::Sensitive)
@@ -39,7 +57,11 @@ impl Charset {
         for character in data.chars() {
             let unique_repr = match case {
                 Case::Sensitive => character,
-                Case::Insensitive => character.to_lowercase(),
+                Case::Insensitive => {
+                    let mut lc = character.to_lowercase();
+                    assert!(lc.len() == 1);
+                    lc.next().unwrap()
+                },
             };
             if seen.contains(&unique_repr) {
                 return None
