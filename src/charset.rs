@@ -1,7 +1,8 @@
 use ::std::ops::Index;
 use ::std::collections::HashSet;
 use ::std::fmt;
-use std::fmt::{Formatter, Write};
+use std::fmt::{Formatter, Write, Error};
+use crate::encode::number2name;
 
 #[derive(Debug, Clone, Copy)]
 pub enum Case {
@@ -9,6 +10,7 @@ pub enum Case {
     Insensitive,
 }
 
+#[derive(Clone)]
 pub struct Charset {
     values: Vec<char>,
     case: Case,
@@ -23,9 +25,18 @@ impl fmt::Debug for Charset {
         })?;
         f.write_str(" character set: [")?;
         for character in &self.values {
-            f.write_char(*character);
+            f.write_char(*character)?;
         }
         f.write_str("])")
+    }
+}
+
+impl fmt::Display for Charset {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        for character in &self.values {
+            f.write_char(*character)?;
+        }
+        Ok(())
     }
 }
 
@@ -77,6 +88,10 @@ impl Charset {
     /// Number of characters.
     pub fn len(&self) -> usize {
         self.values.len()
+    }
+
+    pub fn encode(&self, number: u64) -> String {
+        number2name(number, &self)
     }
 }
 

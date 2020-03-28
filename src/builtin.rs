@@ -11,9 +11,6 @@ lazy_static! {
     pub static ref BASE64URL: Charset = Charset::new("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_", Case::Sensitive);
 }
 
-
-
-
 #[cfg(test)]
 mod tests {
     use super::*;
