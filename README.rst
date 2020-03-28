@@ -22,7 +22,7 @@ For a character set 'abc', the series is::
     13 aaa
     14 aab
 
-Note that this is slightly different from base3 with leading characters stripped:
+Note that this is slightly different from base3 with leading characters stripped::
 
     0 a (or '')
     1 b
