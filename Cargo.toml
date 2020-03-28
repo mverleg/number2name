@@ -1,0 +1,11 @@
+[package]
+name = "number2name"
+version = "1.0.0"
+authors = ["Mark <mverleg.noreply@gmail.com>"]
+edition = "2018"
+
+[lib]
+name = "number2name"
+path = "src/lib.rs"
+
+[dependencies]
