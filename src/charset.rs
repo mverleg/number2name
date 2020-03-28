@@ -46,22 +46,6 @@ impl Index<usize> for Charset {
     }
 }
 
-impl Index<u32> for Charset {
-    type Output = char;
-
-    fn index(&self, index: u32) -> &Self::Output {
-        &self[index as usize]
-    }
-}
-
-impl Index<u64> for Charset {
-    type Output = char;
-
-    fn index(&self, index: u64) -> &Self::Output {
-        &self[index as usize]
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -72,9 +56,9 @@ mod tests {
         assert!(charset.is_some());
         let charset = charset.unwrap();
         assert_eq!(charset.len(), 3);
-        assert_eq!(charset[0u32], 'a');
-        assert_eq!(charset[1u32], 'b');
-        assert_eq!(charset[2u32], 'c');
+        assert_eq!(charset[0], 'a');
+        assert_eq!(charset[1], 'b');
+        assert_eq!(charset[2], 'c');
     }
 
     #[test]
