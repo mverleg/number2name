@@ -1,6 +1,7 @@
 use crate::Charset;
 use crate::typ::N2NErr;
 
+/// Convert a string encoded using the given charset back to the number it represents.
 pub fn name2number<'a>(text: impl AsRef<str>, charset: &Charset) -> Result<u64, N2NErr> {
     let text = text.as_ref();
     if text.is_empty() {
@@ -10,14 +11,22 @@ pub fn name2number<'a>(text: impl AsRef<str>, charset: &Charset) -> Result<u64, 
     let mut number = 0;
     let mut scale = 1;
     for character in text.chars().rev() {
-        dbg!(character);  //TODO @mverleg: remove
         let value = match charset.index_of(character) {
             Ok(i) => i,
             Err(()) => return Err(N2NErr::InvalidCharacter { character, charset: charset.clone() }),
         };
-        number += (value + 1) * scale;
-        dbg!(number);  //TODO @mverleg: remove
-        scale *= size;
+        let addition = (value + 1) * scale;
+        if std::u64::MAX - addition < number {
+            return Err(N2NErr::TooLarge { charset: charset.clone() })
+        }
+        number = match number.checked_add(value * scale + scale) {
+            Some(n) => n,
+            None => return Err(N2NErr::TooLarge { charset: charset.clone() }),
+        };
+        scale = match scale.checked_mul(size) {
+            Some(s) => s,
+            None => return Err(N2NErr::TooLarge { charset: charset.clone() }),
+        };
     }
     // first_char = match text.chars().next() {
     //     Some(c) => c,

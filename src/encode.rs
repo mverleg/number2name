@@ -1,5 +1,6 @@
 use crate::Charset;
 
+/// Convert a number to a short string representation using the given character set.
 pub fn number2name(number: impl Into<u64>, charset: &Charset) -> String {
     let size = charset.len() as u64;
     let mut remainder = number.into();
