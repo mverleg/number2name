@@ -3,6 +3,9 @@ use crate::typ::N2NErr;
 
 pub fn name2number<'a>(text: impl AsRef<str>, charset: &Charset) -> Result<u64, N2NErr> {
     let text = text.as_ref();
+    if text.is_empty() {
+        return Err(N2NErr::EmptyInput)
+    }
     let size = charset.len() as u64;
     let mut number = 0;
     let mut scale = 1;
@@ -16,6 +19,15 @@ pub fn name2number<'a>(text: impl AsRef<str>, charset: &Charset) -> Result<u64, 
         dbg!(number);  //TODO @mverleg: remove
         scale *= size;
     }
+    // first_char = match text.chars().next() {
+    //     Some(c) => c,
+    //     None() => return Err(N2N::EmptyInput),
+    // };
+    // let value = match charset.index_of(character) {
+    //     Ok(i) => i,
+    //     Err(()) => return Err(N2NErr::InvalidCharacter { character, charset: charset.clone() }),
+    // };
+    // number += (value + 1) * scale;
     Ok(number - 1)
 }
 
@@ -140,8 +152,8 @@ mod tests {
     fn invalid_case_insensitive_single() -> Result<(), N2NErr> {
         let charset = Charset::case_insensitive("aBcD");
         match name2number("e", &charset).unwrap_err() {
-            N2NErr::TooLarge { charset: _ } => panic!("wrong error"),
             N2NErr::InvalidCharacter { character, charset: _ } => assert_eq!(character, 'e'),
+            _ => panic!("wrong error"),
         }
         Ok(())
     }
@@ -150,8 +162,8 @@ mod tests {
     fn invalid_case_insensitive_long() -> Result<(), N2NErr> {
         let charset = Charset::case_insensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
         match name2number("gkgwByLwRXT7Pq", &charset).unwrap_err() {
-            N2NErr::TooLarge { charset: _ } => panic!("wrong error"),
             N2NErr::InvalidCharacter { character, charset: _ } => assert_eq!(character, '7'),
+            _ => panic!("wrong error"),
         }
         Ok(())
     }
@@ -160,8 +172,8 @@ mod tests {
     fn invalid_case_sensitive_single() -> Result<(), N2NErr> {
         let charset = Charset::case_sensitive("aBcD");
         match name2number("b", &charset).unwrap_err() {
-            N2NErr::TooLarge { charset: _ } => panic!("wrong error"),
             N2NErr::InvalidCharacter { character, charset: _ } => assert_eq!(character, 'b'),
+            _ => panic!("wrong error"),
         }
         Ok(())
     }
@@ -170,8 +182,8 @@ mod tests {
     fn invalid_case_sensitive_long() -> Result<(), N2NErr> {
         let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
         match name2number("gkgwByLwRXTlPP", &charset).unwrap_err() {
-            N2NErr::TooLarge { charset: _ } => panic!("wrong error"),
             N2NErr::InvalidCharacter { character, charset: _ } => assert_eq!(character, 'l'),
+            _ => panic!("wrong error"),
         }
         Ok(())
     }
@@ -197,7 +209,7 @@ mod tests {
         let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
         match name2number("aaaaaaaaaaaaaaa", &charset).unwrap_err() {
             N2NErr::TooLarge { charset: _ } => {},
-            N2NErr::InvalidCharacter { character: _, charset: _ } => panic!("wrong error"),
+            _ => panic!("wrong error"),
         }
         Ok(())
     }
@@ -207,7 +219,17 @@ mod tests {
         let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
         match name2number("gkgwByLwRXTLPq", &charset).unwrap_err() {
             N2NErr::TooLarge { charset: _ } => {},
-            N2NErr::InvalidCharacter { character: _, charset: _ } => panic!("wrong error"),
+            _ => panic!("wrong error"),
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn empty_input() -> Result<(), N2NErr> {
+        let charset = Charset::case_sensitive("aBcD");
+        match name2number("", &charset).unwrap_err() {
+            N2NErr::EmptyInput => {},
+            _ => panic!("wrong error"),
         }
         Ok(())
     }
