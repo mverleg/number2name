@@ -123,38 +123,95 @@ impl Index<usize> for Charset {
 mod tests {
     use super::*;
 
-    #[test]
-    fn valid_charset() {
-        let charset = Charset::try_new("Abc", Case::Insensitive);
-        assert!(charset.is_some());
-        let charset = charset.unwrap();
-        assert_eq!(charset.len(), 3);
-        assert_eq!(charset[0], 'A');
-        assert_eq!(charset[1], 'b');
-        assert_eq!(charset[2], 'c');
+    mod create {
+        use super::*;
+
+        #[test]
+        fn valid_charset() {
+            let charset = Charset::try_new("Abc", Case::Insensitive);
+            assert!(charset.is_some());
+            let charset = charset.unwrap();
+            assert_eq!(charset.len(), 3);
+        }
+
+        #[test]
+        fn valid_case_duplicate() {
+            let charset = Charset::try_new("abBA", Case::Sensitive);
+            assert!(charset.is_some());
+            let charset = charset.unwrap();
+            assert_eq!(charset.len(), 4);
+        }
+
+        #[test]
+        fn invalid_duplicate() {
+            let charset = Charset::try_new("aba", Case::Insensitive);
+            assert!(charset.is_none());
+        }
+
+        #[test]
+        fn invalid_case_insensitive_duplicate() {
+            let charset = Charset::try_new("abBA", Case::Insensitive);
+            assert!(charset.is_none());
+        }
+
+        #[test]
+        #[should_panic]
+        fn panic_mode() {
+            let charset = Charset::case_insensitive("abBA");
+        }
     }
 
-    #[test]
-    fn valid_case_duplicate() {
-        let charset = Charset::try_new("abBA", Case::Sensitive);
-        assert!(charset.is_some());
-        let charset = charset.unwrap();
-        assert_eq!(charset.len(), 4);
-        assert_eq!(charset[0], 'a');
-        assert_eq!(charset[1], 'b');
-        assert_eq!(charset[2], 'B');
-        assert_eq!(charset[3], 'A');
+    mod indexing {
+        use super::*;
+
+        #[test]
+        fn case_sensitive() {
+            let charset = Charset::case_sensitive("abBA");
+            assert_eq!(charset[0], 'a');
+            assert_eq!(charset[1], 'b');
+            assert_eq!(charset[2], 'B');
+            assert_eq!(charset[3], 'A');
+        }
+
+        #[test]
+        fn case_insensitive() {
+            let charset = Charset::case_insensitive("AbCd");
+            assert_eq!(charset[0], 'A');
+            assert_eq!(charset[1], 'b');
+            assert_eq!(charset[2], 'C');
+            assert_eq!(charset[3], 'd');
+        }
+
+        #[test]
+        #[should_panic]
+        fn out_of_bounds() {
+            let charset = Charset::case_insensitive("AbCd");
+            assert_eq!(charset[4], 'd');
+        }
     }
 
-    #[test]
-    fn invalid_duplicate() {
-        let charset = Charset::try_new("aba", Case::Insensitive);
-        assert!(charset.is_none());
-    }
+    mod index_of {
+        use super::*;
 
-    #[test]
-    fn invalid_case_insensitive_duplicate() {
-        let charset = Charset::try_new("abBA", Case::Insensitive);
-        assert!(charset.is_none());
+
+        #[test]
+        fn case_sensitive() -> Result<(), ()> {
+            let charset = Charset::case_sensitive("abBA");
+            assert_eq!(charset.index_of('a')?, 0);
+            assert_eq!(charset.index_of('b')?, 1);
+            assert_eq!(charset.index_of('B')?, 2);
+            assert_eq!(charset.index_of('A')?, 3);
+            Ok(())
+        }
+
+        #[test]
+        fn case_insensitive() -> Result<(), ()> {
+            let charset = Charset::case_insensitive("AbCd");
+            assert_eq!(charset.index_of('A')?, 0);
+            assert_eq!(charset.index_of('b')?, 1);
+            assert_eq!(charset.index_of('C')?, 2);
+            assert_eq!(charset.index_of('d')?, 3);
+            Ok(())
+        }
     }
 }

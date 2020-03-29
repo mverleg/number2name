@@ -1,3 +1,4 @@
+#![feature(const_if_match)]
 
 mod util;
 mod typ;

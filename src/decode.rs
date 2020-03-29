@@ -14,14 +14,10 @@ pub fn name2number<'a>(text: impl AsRef<str>, charset: &Charset) -> Result<u64, 
     // Handle the other letters, with special case for near-overflow
     let mut scale: u64 = 1;
     for character in text.chars().rev().skip(1) {
-        dbg!(character);  //TODO @mverleg: remove
         let value = get_index(character, charset)?;
-        dbg!(value);  //TODO @mverleg: remove
         match scale.checked_mul(size) {
             Some(new_scale) => {
                 scale = new_scale;
-                let add = (value + 1) * scale;  //TODO @mark: TEMPORARY! REMOVE THIS!
-                dbg!(add);  //TODO @mverleg: remove
                 number = match number.checked_add((value + 1) * scale) {
                     Some(n) => n,
                     None => return Err(N2NErr::TooLarge { charset: charset.clone() }),
