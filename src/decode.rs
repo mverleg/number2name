@@ -128,12 +128,72 @@ mod tests {
     }
 
     //TODO @mark: more tests for invalid input
-    //TODO @mark: more tests for length
+
+    #[test]
+    fn valid_case_insensitive_single() {
+        let charset = Charset::case_insensitive("aBcD");
+        let nr = name2number("bd", &charset).unwrap();
+        assert_eq!(nr, 8 + 3);
+    }
+
+    #[test]
+    fn invalid_case_insensitive_single() {
+        let charset = Charset::case_insensitive("aBcD");
+        match name2number("e", &charset).unwrap_err() {
+            N2NErr::TooLarge { charset: _ } => panic!("wrong error"),
+            N2NErr::InvalidCharacter { character, charset: _ } => assert_eq!(character, 'e'),
+        }
+    }
+
+    #[test]
+    fn invalid_case_insensitive_long() {
+        let charset = Charset::case_insensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        match name2number("gkgwByLwRXT7Pq", &charset).unwrap_err() {
+            N2NErr::TooLarge { charset: _ } => panic!("wrong error"),
+            N2NErr::InvalidCharacter { character, charset: _ } => assert_eq!(character, '7'),
+        }
+    }
+
+    #[test]
+    fn invalid_case_sensitive_single() {
+        let charset = Charset::case_sensitive("aBcD");
+        match name2number("b", &charset).unwrap_err() {
+            N2NErr::TooLarge { charset: _ } => panic!("wrong error"),
+            N2NErr::InvalidCharacter { character, charset: _ } => assert_eq!(character, 'b'),
+        }
+    }
+
+    #[test]
+    fn invalid_case_sensitive_long() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        match name2number("gkgwByLwRXTlPP", &charset).unwrap_err() {
+            N2NErr::TooLarge { charset: _ } => panic!("wrong error"),
+            N2NErr::InvalidCharacter { character, charset: _ } => assert_eq!(character, 'l'),
+        }
+    }
 
     #[test]
     fn near_overflow() {
         let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
         let nr = name2number("gkgwByLwRXTLPP", &charset).unwrap();
         assert_eq!(nr, std::u64::MAX);
+    }
+
+    #[test]
+    fn too_long() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        match name2number("aaaaaaaaaaaaaaa", &charset).unwrap_err() {
+            N2NErr::TooLarge { charset: _ } => {},
+            N2NErr::InvalidCharacter { character: _, charset: _ } => panic!("wrong error"),
+        }
+    }
+
+    #[test]
+    fn limit_plus_one() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        match name2number("gkgwByLwRXTLPq", &charset).unwrap_err() {
+            N2NErr::TooLarge { charset: _ } => {},
+            N2NErr::InvalidCharacter { character: _, charset: _ } => panic!("wrong error"),
+        }
     }
 }
