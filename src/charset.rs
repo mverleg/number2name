@@ -7,7 +7,7 @@ use crate::decode::name2number;
 use crate::typ::N2NErr;
 use crate::util::lower;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Case {
     Sensitive,
     Insensitive,
@@ -92,13 +92,20 @@ impl Charset {
     /// Find the numberical position of a character.
     //TODO @mark: tests
     pub fn index_of(&self, character: char) -> Result<u64, ()> {
-        // let representation = lower(character);
-        let representation = character;
-        for i in 0..self.values.len() {
-            if self.values[i] == representation {
-                return Ok(i as u64);
+        if self.case == Case::Sensitive {
+            for i in 0..self.values.len() {
+                if self.values[i] == character {
+                    return Ok(i as u64);
+                }
             }
-        }
+        } else {
+            let representation = lower(character);
+            for i in 0..self.values.len() {
+                if lower(self.values[i]) == representation {
+                    return Ok(i as u64);
+                }
+            }
+        };
         Err(())
     }
 
