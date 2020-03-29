@@ -105,7 +105,7 @@ pub fn encode(c: &mut Criterion) {
         charset.encode(black_box(596_578_767_027_239_687));
         charset.encode(black_box(426_071_395_988_457_303));
         charset.encode(black_box(428_636_909_288_626_891));
-        charset.encode(black_box(870_130_888_288_961_047));
+        charset.encode(black_box(std::u64::MAX));
     }));
 }
 
@@ -207,13 +207,16 @@ pub fn decode(c: &mut Criterion) {
         charset.decode(black_box("8a528xr2_rdrx")).unwrap();
         charset.decode(black_box("8xrm52r2ar82h")).unwrap();
         charset.decode(black_box("h5m8rm558_m28")).unwrap();
-        charset.decode(black_box("mhr88_2h8mr2d2")).unwrap_err();
-        charset.decode(black_box("x_2x58525ah5h2")).unwrap_err();
+        charset.decode(black_box("mhr88_2h8mr2d")).unwrap();
+        charset.decode(black_box("x_2x58525ah5h")).unwrap();
         charset.decode(black_box("rh2a5dm_x_88r2")).unwrap_err();
         charset.decode(black_box("rh82m2_a_h8822")).unwrap_err();
         charset.decode(black_box("85adma888h88_2")).unwrap_err();
     }));
 }
 
-criterion_group!(benches, decode);
+criterion_group!(benches,
+    encode,
+    decode,
+);
 criterion_main!(benches);
