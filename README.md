@@ -9,6 +9,27 @@ It can convert from index to string and back, for different character sets.
 Example
 -------------------------------
 
+From number to text:
+
+    let charset = Charset::case_insensitive("abc");
+    let text = charset.encode(13);
+    assert_eq!(text, "aab");
+    
+From text to number:
+    
+    let nr = charset.decode("aab")?;
+    assert_eq!(nr, 13);
+
+Install
+-------------------------------
+
+`Cargo.toml`:
+
+    number2name = "^1.0.0"
+
+Encoding
+-------------------------------
+
 For a character set 'abc', the series is::
 
     0 a
