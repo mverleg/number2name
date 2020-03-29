@@ -9,7 +9,7 @@ lazy_static! {
     pub static ref BASE32HUMAN: Charset = Charset::case_insensitive("abcdefghjkmnpqrstuvwxyz23456789_");
     // Note: unlike 'real' Crockford, this does not accept e.g. L as 1 when decoding.
     pub static ref BASE32CROCKFORD: Charset = Charset::case_insensitive("0123456789ABCDEFGHJKMNPQRSTVWXYZ");
-    pub static ref BASE32SCNY: Charset = Charset::case_insensitive("一二三四五六七八九十鼠牛虎兔龍蛇马羊猴鸡狗猪凤北东南西中左右上下");
+    pub static ref BASE32SCNY: Charset = Charset::case_sensitive("一二三四五六七八九十鼠牛虎兔龍蛇马羊猴鸡狗猪凤北东南西中左右上下");
     pub static ref BASE32HEX: Charset = Charset::case_insensitive("0123456789ABCDEFGHIJKLMNOPQRSTUV");
     pub static ref BASE64: Charset = Charset::case_sensitive("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
     pub static ref BASE64URL: Charset = Charset::case_sensitive("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_");

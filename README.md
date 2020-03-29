@@ -42,43 +42,43 @@ You can easily use your own character sets using `number2name::Charset`.
 
 Or use one of the built-in ones:
 
-* **HEX** 
+* **HEX**
 
     0123456789abcdef
     
-* **HEXLOWERCASE** (case-sensitive)::
+* **HEXLOWERCASE** (case-sensitive)
 
     0123456789abcdef
     
-* **BASE32**::
+* **BASE32**
 
     ABCDEFGHIJKLMNOPQRSTUVWXYZ234567
     
-* **BASE32LOWERCASE** (case-sensitive)::
+* **BASE32LOWERCASE** (case-sensitive)
 
     ABCDEFGHIJKLMNOPQRSTUVWXYZ234567
     
-* **BASE32HUMAN**::
+* **BASE32HUMAN**
 
     abcdefghjkmnpqrstuvwxyz23456789
     
-* **BASE32CROCKFORD**::
+* **BASE32CROCKFORD**
 
     0123456789ABCDEFGHJKMNPQRSTVWXYZ
     
-* **BASE32SCNY**::
+* **BASE32SCNY**
 
     一二三四五六七八九十鼠牛虎兔龍蛇马羊猴鸡狗猪凤北东南西中左右上下
     
-* **BASE32HEX**::
+* **BASE32HEX**
 
     0123456789ABCDEFGHIJKLMNOPQRSTUV
     
-* **BASE64** (case-sensitive)::
+* **BASE64** (case-sensitive)
 
     ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
     
-* **BASE64URL** (case-sensitive)::
+* **BASE64URL** (case-sensitive)
 
     ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_
     
