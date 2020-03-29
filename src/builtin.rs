@@ -1,16 +1,18 @@
 use ::lazy_static::lazy_static;
-use crate::charset::{Charset, Case};
+use crate::charset::Charset;
 
 lazy_static! {
-    pub static ref HEX: Charset = Charset::new("0123456789abcdef", Case::Insensitive);
-    pub static ref BASE32: Charset = Charset::new("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567", Case::Insensitive);
-    pub static ref BASE32HUMAN: Charset = Charset::new("abcdefghjkmnpqrstuvwxyz23456789_", Case::Insensitive);
+    pub static ref HEX: Charset = Charset::case_insensitive("0123456789abcdef");
+    pub static ref HEXLOWERCASE: Charset = Charset::case_sensitive("0123456789abcdef");
+    pub static ref BASE32: Charset = Charset::case_insensitive("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567");
+    pub static ref BASE32LOWERCASE: Charset = Charset::case_sensitive("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567");
+    pub static ref BASE32HUMAN: Charset = Charset::case_insensitive("abcdefghjkmnpqrstuvwxyz23456789_");
     // Note: unlike 'real' Crockford, this does not accept e.g. L as 1 when decoding.
-    pub static ref BASE32CROCKFORD: Charset = Charset::new("0123456789ABCDEFGHJKMNPQRSTVWXYZ", Case::Insensitive);
-    pub static ref BASE32SCNY: Charset = Charset::new("一二三四五六七八九十鼠牛虎兔龍蛇马羊猴鸡狗猪凤北东南西中左右上下", Case::Insensitive);
-    pub static ref BASE32HEX: Charset = Charset::new("0123456789ABCDEFGHIJKLMNOPQRSTUV", Case::Insensitive);
-    pub static ref BASE64: Charset = Charset::new("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", Case::Sensitive);
-    pub static ref BASE64URL: Charset = Charset::new("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_", Case::Sensitive);
+    pub static ref BASE32CROCKFORD: Charset = Charset::case_insensitive("0123456789ABCDEFGHJKMNPQRSTVWXYZ");
+    pub static ref BASE32SCNY: Charset = Charset::case_insensitive("一二三四五六七八九十鼠牛虎兔龍蛇马羊猴鸡狗猪凤北东南西中左右上下");
+    pub static ref BASE32HEX: Charset = Charset::case_insensitive("0123456789ABCDEFGHIJKLMNOPQRSTUV");
+    pub static ref BASE64: Charset = Charset::case_sensitive("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
+    pub static ref BASE64URL: Charset = Charset::case_sensitive("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_");
 }
 
 #[cfg(test)]
