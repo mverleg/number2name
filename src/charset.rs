@@ -1,9 +1,10 @@
-use ::std::ops::Index;
-use ::std::collections::HashSet;
+use ::std::collections::HashMap;
 use ::std::fmt;
-use std::fmt::{Formatter, Write};
-use crate::encode::number2name;
+use ::std::fmt::{Formatter, Write};
+use ::std::ops::Index;
+
 use crate::decode::name2number;
+use crate::encode::number2name;
 use crate::typ::N2NErr;
 use crate::util::lower;
 
@@ -16,6 +17,7 @@ pub enum Case {
 #[derive(Clone)]
 pub struct Charset {
     values: Vec<char>,
+    lookup: HashMap<char, u64>,
     case: Case,
 }
 
@@ -66,21 +68,21 @@ impl Charset {
     pub fn try_new<'a>(data: impl AsRef<str>, case: Case) -> Option<Self> {
         let data = data.as_ref();
         assert!(data.len() > 0);
-        let mut seen = HashSet::new();
+        let mut lookup = HashMap::new();
         let mut values = Vec::with_capacity(data.len());
-        for character in data.chars() {
+        for (index, character) in data.chars().enumerate() {
             let unique_repr = match case {
                 Case::Sensitive => character,
                 Case::Insensitive => lower(character),
             };
-            if seen.contains(&unique_repr) {
+            if lookup.contains_key(&unique_repr) {
                 return None
             }
-            seen.insert(unique_repr);
+            lookup.insert(unique_repr, index as u64);
             values.push(character)
         }
         Some(Charset {
-            values, case
+            values, lookup, case
         })
     }
 
@@ -90,8 +92,8 @@ impl Charset {
     }
 
     /// Find the numberical position of a character.
-    //TODO @mark: tests
     pub fn index_of(&self, character: char) -> Result<u64, ()> {
+        unimplemented!();  //TODO @mark: TEMPORARY! REMOVE THIS!
         if self.case == Case::Sensitive {
             for i in 0..self.values.len() {
                 if self.values[i] == character {
