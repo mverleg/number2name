@@ -1,4 +1,5 @@
 
+mod util;
 mod typ;
 mod charset;
 mod builtin;
@@ -25,4 +26,3 @@ mod tests {
         unimplemented!()
     }
 }
-

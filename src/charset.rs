@@ -5,6 +5,7 @@ use std::fmt::{Formatter, Write};
 use crate::encode::number2name;
 use crate::decode::name2number;
 use crate::typ::N2NErr;
+use crate::util::lower;
 
 #[derive(Debug, Clone, Copy)]
 pub enum Case {
@@ -70,11 +71,7 @@ impl Charset {
         for character in data.chars() {
             let unique_repr = match case {
                 Case::Sensitive => character,
-                Case::Insensitive => {
-                    let mut lc = character.to_lowercase();
-                    assert!(lc.len() == 1);
-                    lc.next().unwrap()
-                },
+                Case::Insensitive => lower(character),
             };
             if seen.contains(&unique_repr) {
                 return None
@@ -95,10 +92,9 @@ impl Charset {
     /// Find the numberical position of a character.
     //TODO @mark: tests
     pub fn index_of(&self, character: char) -> Result<u64, ()> {
-        //TODO @mark: faster
-        //TODO @mark: case-insensitive mode?
+        let representation = lower(character);
         for i in 0..self.values.len() {
-            if self.values[i] == character {
+            if self.values[i] == representation {
                 return Ok(i as u64);
             }
         }

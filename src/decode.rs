@@ -16,26 +16,7 @@ pub fn name2number<'a>(text: impl Into<&'a str>, charset: &Charset) -> Result<u6
         dbg!(number);  //TODO @mverleg: remove
         scale *= size;
     }
-
-
     Ok(number - 1)
-
-//    let size = charset.len() as u64;
-//     let mut remainder = number.into();
-//     let mut name = Vec::new();
-//     loop {
-//         let index = remainder % size;
-//         name.push(index as usize);
-//         remainder /= size;
-//         if remainder == 0 {
-//             break;
-//         }
-//         remainder -= 1;
-//     }
-//     name.into_iter()
-//         .map(|index| charset[index])
-//         .rev()
-//         .collect()
 }
 
 #[cfg(test)]
@@ -127,10 +108,15 @@ mod tests {
         assert_eq!(nr, 7);
     }
 
-    //TODO @mark: more tests for invalid input
-
     #[test]
     fn valid_case_insensitive_single() {
+        let charset = Charset::case_insensitive("0a");
+        let nr = name2number("A", &charset).unwrap();
+        assert_eq!(nr, 1);
+    }
+
+    #[test]
+    fn valid_case_insensitive_double() {
         let charset = Charset::case_insensitive("aBcD");
         let nr = name2number("bd", &charset).unwrap();
         assert_eq!(nr, 8 + 3);
@@ -170,6 +156,13 @@ mod tests {
             N2NErr::TooLarge { charset: _ } => panic!("wrong error"),
             N2NErr::InvalidCharacter { character, charset: _ } => assert_eq!(character, 'l'),
         }
+    }
+
+    #[test]
+    fn below_overflow() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        let nr = name2number("gkgwByLwRXTLPo", &charset).unwrap();
+        assert_eq!(nr, std::u64::MAX - 1);
     }
 
     #[test]
