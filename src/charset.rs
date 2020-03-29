@@ -92,7 +92,8 @@ impl Charset {
     /// Find the numberical position of a character.
     //TODO @mark: tests
     pub fn index_of(&self, character: char) -> Result<u64, ()> {
-        let representation = lower(character);
+        // let representation = lower(character);
+        let representation = character;
         for i in 0..self.values.len() {
             if self.values[i] == representation {
                 return Ok(i as u64);

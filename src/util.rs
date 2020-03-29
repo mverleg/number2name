@@ -29,7 +29,9 @@ mod tests {
     }
 
     #[test]
+    #[should_panic]
     fn test_invalid_lowercase() {
-        unimplemented!()
+        // Example from https://doc.rust-lang.org/std/primitive.char.html#method.to_lowercase
+        lower('İ');
     }
 }

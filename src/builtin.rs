@@ -5,6 +5,8 @@ lazy_static! {
     pub static ref HEX: Charset = Charset::new("0123456789abcdef", Case::Insensitive);
     pub static ref BASE32: Charset = Charset::new("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567", Case::Insensitive);
     pub static ref BASE32HUMAN: Charset = Charset::new("abcdefghjkmnpqrstuvwxyz23456789_", Case::Insensitive);
+    // Note: unlike 'real' Crockford, this does not accept e.g. L as 1 when decoding.
+    pub static ref BASE32CROCKFORD: Charset = Charset::new("0123456789ABCDEFGHJKMNPQRSTVWXYZ", Case::Insensitive);
     pub static ref BASE32SCNY: Charset = Charset::new("一二三四五六七八九十鼠牛虎兔龍蛇马羊猴鸡狗猪凤北东南西中左右上下", Case::Insensitive);
     pub static ref BASE32HEX: Charset = Charset::new("0123456789ABCDEFGHIJKLMNOPQRSTUV", Case::Insensitive);
     pub static ref BASE64: Charset = Charset::new("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", Case::Sensitive);
@@ -39,12 +41,19 @@ mod tests {
         assert_eq!(BASE32SCNY.index_of('下').unwrap(), 31);
     }
 
-    #[test]
     fn base32human() {
         assert_eq!(BASE32HUMAN[0], 'a');
         assert_eq!(BASE32HUMAN[31], '_');
         assert_eq!(BASE32HUMAN.index_of('a').unwrap(), 0);
         assert_eq!(BASE32HUMAN.index_of('_').unwrap(), 31);
+    }
+
+    #[test]
+    fn base32crockford() {
+        assert_eq!(BASE32CROCKFORD[0], '0');
+        assert_eq!(BASE32CROCKFORD[31], 'Z');
+        assert_eq!(BASE32CROCKFORD.index_of('0').unwrap(), 0);
+        assert_eq!(BASE32CROCKFORD.index_of('Z').unwrap(), 31);
     }
 
     #[test]
