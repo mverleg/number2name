@@ -6,6 +6,8 @@ authors = ["Mark <mverleg.noreply@gmail.com>"]
 homepage = "https://github.com/mverleg/number2name"
 repository = "https://github.com/mverleg/number2name"
 readme = "README.rst"
+license = "BSD-3-Clause"
+keywords = ["encoding", "decoding"]
 edition = "2018"
 
 [lib]
