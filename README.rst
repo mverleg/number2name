@@ -2,7 +2,7 @@
 number2name (Rust library)
 ===============================
 
-This is an extremely simple Rust library to convert an index to an accompanying name that is as short as possible.
+This is a simple Rust library to convert an index to a name that is as short as possible.
 
 It can convert from index to string and back, for different character sets.
 
@@ -22,7 +22,7 @@ For a character set 'abc', the series is::
     12 aaa
     13 aab
 
-Note that this is slightly different from base3 with leading characters stripped::
+Note that this is slightly shorter than base3 with leading characters stripped::
 
     0 a (or '')
     1 b

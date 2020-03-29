@@ -1,7 +1,11 @@
 [package]
 name = "number2name"
+description = "Simple Rust library to convert an index to a name that is as short as possible."
 version = "1.0.0"
 authors = ["Mark <mverleg.noreply@gmail.com>"]
+homepage = "https://github.com/mverleg/number2name"
+repository = "https://github.com/mverleg/number2name"
+readme = "README.rst"
 edition = "2018"
 
 [lib]
