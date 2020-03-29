@@ -109,9 +109,9 @@ pub fn encode(c: &mut Criterion) {
     }));
 }
 
-pub fn decode(c: &mut Criterion) {
-    let charset: &Charset = &*BASE32HUMAN;
-    c.bench_function("encoding", |b| b.iter(|| {
+pub fn decode_case_sensitive(c: &mut Criterion) {
+    let charset = Charset::case_sensitive("abcdefghjkmnpqrstuvwxyz23456789_");
+    c.bench_function("decoding CS", |b| b.iter(|| {
         charset.decode(black_box("x52")).unwrap();
         charset.decode(black_box("dha")).unwrap();
         charset.decode(black_box("d8r")).unwrap();
@@ -215,8 +215,115 @@ pub fn decode(c: &mut Criterion) {
     }));
 }
 
+pub fn decode_case_insensitive(c: &mut Criterion) {
+    let charset: &Charset = &*BASE32HUMAN;
+    c.bench_function("decoding CI", |b| b.iter(|| {
+        charset.decode(black_box("X52")).unwrap();
+        charset.decode(black_box("DHA")).unwrap();
+        charset.decode(black_box("D8R")).unwrap();
+        charset.decode(black_box("2AR")).unwrap();
+        charset.decode(black_box("_82")).unwrap();
+        charset.decode(black_box("8MR")).unwrap();
+        charset.decode(black_box("XX2")).unwrap();
+        charset.decode(black_box("H8A")).unwrap();
+        charset.decode(black_box("55X")).unwrap();
+        charset.decode(black_box("HH8")).unwrap();
+        charset.decode(black_box("ARH")).unwrap();
+        charset.decode(black_box("82A")).unwrap();
+        charset.decode(black_box("28A")).unwrap();
+        charset.decode(black_box("5X5")).unwrap();
+        charset.decode(black_box("R88")).unwrap();
+        charset.decode(black_box("MRR")).unwrap();
+        charset.decode(black_box("M8_")).unwrap();
+        charset.decode(black_box("DDD")).unwrap();
+        charset.decode(black_box("258")).unwrap();
+        charset.decode(black_box("_DX")).unwrap();
+        charset.decode(black_box("A_R")).unwrap();
+        charset.decode(black_box("D28")).unwrap();
+        charset.decode(black_box("A85")).unwrap();
+        charset.decode(black_box("RRD")).unwrap();
+        charset.decode(black_box("RD2")).unwrap();
+        charset.decode(black_box("2XD5R_")).unwrap();
+        charset.decode(black_box("DDADH_")).unwrap();
+        charset.decode(black_box("A5DMA8")).unwrap();
+        charset.decode(black_box("XD_D2R")).unwrap();
+        charset.decode(black_box("MX5XAH")).unwrap();
+        charset.decode(black_box("8HXXRA")).unwrap();
+        charset.decode(black_box("28882H")).unwrap();
+        charset.decode(black_box("XD58_A")).unwrap();
+        charset.decode(black_box("XM2MH5")).unwrap();
+        charset.decode(black_box("8A_25M")).unwrap();
+        charset.decode(black_box("58_MHM")).unwrap();
+        charset.decode(black_box("H8D2MM")).unwrap();
+        charset.decode(black_box("2_HMRD")).unwrap();
+        charset.decode(black_box("ARXAA2")).unwrap();
+        charset.decode(black_box("RXXMAM")).unwrap();
+        charset.decode(black_box("DX888A")).unwrap();
+        charset.decode(black_box("H5DH2X")).unwrap();
+        charset.decode(black_box("M2M8A8")).unwrap();
+        charset.decode(black_box("RD88D_")).unwrap();
+        charset.decode(black_box("M_X_5H")).unwrap();
+        charset.decode(black_box("RAXMXH")).unwrap();
+        charset.decode(black_box("R2DHHR")).unwrap();
+        charset.decode(black_box("R8DMM8")).unwrap();
+        charset.decode(black_box("D22RX5")).unwrap();
+        charset.decode(black_box("A8HX8X")).unwrap();
+        charset.decode(black_box("_D5__52_8_58")).unwrap();
+        charset.decode(black_box("AX_AR2DAAMRR")).unwrap();
+        charset.decode(black_box("HX85X588RAM5")).unwrap();
+        charset.decode(black_box("X8225X_MDA8H")).unwrap();
+        charset.decode(black_box("MXHRRXD_M_AR")).unwrap();
+        charset.decode(black_box("X528_5MDA25H")).unwrap();
+        charset.decode(black_box("RMX5MMH8RXD2")).unwrap();
+        charset.decode(black_box("AADA8HD2M8RA")).unwrap();
+        charset.decode(black_box("MDM_5_RM8MHD")).unwrap();
+        charset.decode(black_box("A_ARR2HX2M_R")).unwrap();
+        charset.decode(black_box("MDDAXA8RAH5A")).unwrap();
+        charset.decode(black_box("85AX25_88M_8")).unwrap();
+        charset.decode(black_box("MDAR8X_5XA_2")).unwrap();
+        charset.decode(black_box("5_2XA_H_XMRX")).unwrap();
+        charset.decode(black_box("R52DDA_8R25H")).unwrap();
+        charset.decode(black_box("HMDX5ARA58_M")).unwrap();
+        charset.decode(black_box("XRAXX58DMX5A")).unwrap();
+        charset.decode(black_box("2_M_MDH_H_2A")).unwrap();
+        charset.decode(black_box("RRM88M2H_H58")).unwrap();
+        charset.decode(black_box("MDMR582RH2XD")).unwrap();
+        charset.decode(black_box("_8HA_DH8XMAH")).unwrap();
+        charset.decode(black_box("_D8MXDRAX_8A")).unwrap();
+        charset.decode(black_box("2DRHAXR2X8HH")).unwrap();
+        charset.decode(black_box("R2HHDRX5AM88")).unwrap();
+        charset.decode(black_box("DH_HA58885AR")).unwrap();
+        charset.decode(black_box("5ARM5X5A_2HXH")).unwrap();
+        charset.decode(black_box("2552X8MARR8A5")).unwrap();
+        charset.decode(black_box("R8A5A2222RMMD")).unwrap();
+        charset.decode(black_box("M_AMAHH2XRM2D")).unwrap();
+        charset.decode(black_box("RR8DRXD8A5XA5")).unwrap();
+        charset.decode(black_box("H_D8A55_5MXD5")).unwrap();
+        charset.decode(black_box("_HXAR5252R_X5")).unwrap();
+        charset.decode(black_box("ADDRX_HX25MMX")).unwrap();
+        charset.decode(black_box("_XDXMXM__A2HH")).unwrap();
+        charset.decode(black_box("HDDR2AXXHRRA2")).unwrap();
+        charset.decode(black_box("8HDH8AHA22MRA")).unwrap();
+        charset.decode(black_box("X5_X5A___A_HH")).unwrap();
+        charset.decode(black_box("H5_HAXAA2285X")).unwrap();
+        charset.decode(black_box("H58MH5H2RHDRM")).unwrap();
+        charset.decode(black_box("5RARRHA2RH52M")).unwrap();
+        charset.decode(black_box("82_8XA5A8_2XR")).unwrap();
+        charset.decode(black_box("_RDA222XR8X_D")).unwrap();
+        charset.decode(black_box("8A528XR2_RDRX")).unwrap();
+        charset.decode(black_box("8XRM52R2AR82H")).unwrap();
+        charset.decode(black_box("H5M8RM558_M28")).unwrap();
+        charset.decode(black_box("MHR88_2H8MR2D")).unwrap();
+        charset.decode(black_box("X_2X58525AH5H")).unwrap();
+        charset.decode(black_box("RH2A5DM_X_88R2")).unwrap_err();
+        charset.decode(black_box("RH82M2_A_H8822")).unwrap_err();
+        charset.decode(black_box("85ADMA888H88_2")).unwrap_err();
+    }));
+}
+
 criterion_group!(benches,
     encode,
-    decode,
+    decode_case_sensitive,
+    decode_case_insensitive,
 );
 criterion_main!(benches);

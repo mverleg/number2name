@@ -93,22 +93,15 @@ impl Charset {
 
     /// Find the numberical position of a character.
     pub fn index_of(&self, character: char) -> Result<u64, ()> {
-        unimplemented!();  //TODO @mark: TEMPORARY! REMOVE THIS!
-        if self.case == Case::Sensitive {
-            for i in 0..self.values.len() {
-                if self.values[i] == character {
-                    return Ok(i as u64);
-                }
-            }
+        let representation = if self.case == Case::Sensitive {
+            character
         } else {
-            let representation = lower(character);
-            for i in 0..self.values.len() {
-                if lower(self.values[i]) == representation {
-                    return Ok(i as u64);
-                }
-            }
+            lower(character)
         };
-        Err(())
+        match self.lookup.get(&representation) {
+            Some(index) => Ok(*index),
+            None => Err(()),
+        }
     }
 
     pub fn encode(&self, number: u64) -> String {

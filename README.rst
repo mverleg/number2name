@@ -50,3 +50,12 @@ Or use one of the built-in ones:
 * BASE32SCNY: `一二三四五六七八九十鼠牛虎兔龍蛇马羊猴鸡狗猪凤北东南西中左右上下`
 * BASE64: `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/`
 * BASE64URL: `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_`
+
+Notes
+-------------------------------
+
+* It's generally pretty fast, but if performance is critical:
+
+    - Re-use the Charset instances (automatic for built-in ones)
+    - Use case-sensitive character sets where possible (_CS postfix)
+
