@@ -1,5 +1,5 @@
-use crate::Charset;
 use crate::typ::N2NErr;
+use crate::Charset;
 
 /// Convert a string encoded using the given charset back to the number it represents.
 pub fn name2number(text: impl AsRef<str>, charset: &Charset) -> Result<u64, N2NErr> {
@@ -9,7 +9,7 @@ pub fn name2number(text: impl AsRef<str>, charset: &Charset) -> Result<u64, N2NE
     let mut number = if let Some(first_char) = text.chars().rev().next() {
         get_index(first_char, charset)?
     } else {
-        return Err(N2NErr::EmptyInput)
+        return Err(N2NErr::EmptyInput);
     };
     // Handle the other letters, with special case for near-overflow
     let mut scale: u64 = 1;
@@ -20,10 +20,18 @@ pub fn name2number(text: impl AsRef<str>, charset: &Charset) -> Result<u64, N2NE
                 scale = new_scale;
                 number = match number.checked_add((value + 1) * scale) {
                     Some(n) => n,
-                    None => return Err(N2NErr::TooLarge { charset: charset.clone() }),
+                    None => {
+                        return Err(N2NErr::TooLarge {
+                            charset: charset.clone(),
+                        })
+                    }
                 }
-            },
-            None => return Err(N2NErr::TooLarge { charset: charset.clone() }),
+            }
+            None => {
+                return Err(N2NErr::TooLarge {
+                    charset: charset.clone(),
+                })
+            }
         };
     }
     Ok(number)
@@ -32,7 +40,10 @@ pub fn name2number(text: impl AsRef<str>, charset: &Charset) -> Result<u64, N2NE
 fn get_index(character: char, charset: &Charset) -> Result<u64, N2NErr> {
     match charset.index_of(character) {
         Ok(i) => Ok(i),
-        Err(()) => Err(N2NErr::InvalidCharacter { character, charset: charset.clone() }),
+        Err(()) => Err(N2NErr::InvalidCharacter {
+            character,
+            charset: charset.clone(),
+        }),
     }
 }
 
@@ -157,7 +168,10 @@ mod tests {
     fn invalid_case_insensitive_single() -> Result<(), N2NErr> {
         let charset = Charset::case_insensitive("aBcD");
         match name2number("e", &charset).unwrap_err() {
-            N2NErr::InvalidCharacter { character, charset: _ } => assert_eq!(character, 'e'),
+            N2NErr::InvalidCharacter {
+                character,
+                charset: _,
+            } => assert_eq!(character, 'e'),
             _ => panic!("wrong error"),
         }
         Ok(())
@@ -167,7 +181,10 @@ mod tests {
     fn invalid_case_insensitive_long() -> Result<(), N2NErr> {
         let charset = Charset::case_insensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
         match name2number("gkgwByLwRXT7Pq", &charset).unwrap_err() {
-            N2NErr::InvalidCharacter { character, charset: _ } => assert_eq!(character, '7'),
+            N2NErr::InvalidCharacter {
+                character,
+                charset: _,
+            } => assert_eq!(character, '7'),
             _ => panic!("wrong error"),
         }
         Ok(())
@@ -177,7 +194,10 @@ mod tests {
     fn invalid_case_sensitive_single() -> Result<(), N2NErr> {
         let charset = Charset::case_sensitive("aBcD");
         match name2number("b", &charset).unwrap_err() {
-            N2NErr::InvalidCharacter { character, charset: _ } => assert_eq!(character, 'b'),
+            N2NErr::InvalidCharacter {
+                character,
+                charset: _,
+            } => assert_eq!(character, 'b'),
             _ => panic!("wrong error"),
         }
         Ok(())
@@ -187,7 +207,10 @@ mod tests {
     fn invalid_case_sensitive_long() -> Result<(), N2NErr> {
         let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
         match name2number("gkgwByLwRXTlPP", &charset).unwrap_err() {
-            N2NErr::InvalidCharacter { character, charset: _ } => assert_eq!(character, 'l'),
+            N2NErr::InvalidCharacter {
+                character,
+                charset: _,
+            } => assert_eq!(character, 'l'),
             _ => panic!("wrong error"),
         }
         Ok(())
@@ -213,7 +236,7 @@ mod tests {
     fn too_long() -> Result<(), N2NErr> {
         let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
         match name2number("aaaaaaaaaaaaaaa", &charset).unwrap_err() {
-            N2NErr::TooLarge { charset: _ } => {},
+            N2NErr::TooLarge { charset: _ } => {}
             _ => panic!("wrong error"),
         }
         Ok(())
@@ -223,7 +246,7 @@ mod tests {
     fn limit_plus_one() -> Result<(), N2NErr> {
         let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
         match name2number("gkgwByLwRXTLPq", &charset).unwrap_err() {
-            N2NErr::TooLarge { charset: _ } => {},
+            N2NErr::TooLarge { charset: _ } => {}
             _ => panic!("wrong error"),
         }
         Ok(())
@@ -233,7 +256,7 @@ mod tests {
     fn empty_input() -> Result<(), N2NErr> {
         let charset = Charset::case_sensitive("aBcD");
         match name2number("", &charset).unwrap_err() {
-            N2NErr::EmptyInput => {},
+            N2NErr::EmptyInput => {}
             _ => panic!("wrong error"),
         }
         Ok(())

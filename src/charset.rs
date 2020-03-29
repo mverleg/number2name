@@ -79,13 +79,15 @@ impl Charset {
                 Case::Insensitive => lower(character),
             };
             if lookup.contains_key(&unique_repr) {
-                return None
+                return None;
             }
             lookup.insert(unique_repr, index as u64);
             values.push(character)
         }
         Some(Charset {
-            values, lookup, case
+            values,
+            lookup,
+            case,
         })
     }
 

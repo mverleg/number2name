@@ -1,5 +1,5 @@
-use ::lazy_static::lazy_static;
 use crate::charset::Charset;
+use ::lazy_static::lazy_static;
 
 lazy_static! {
     pub static ref HEX: Charset = Charset::case_insensitive("0123456789abcdef");

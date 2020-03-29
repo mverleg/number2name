@@ -12,10 +12,13 @@ impl Into<String> for N2NErr {
         match self {
             N2NErr::EmptyInput => "input was empty while decoding".to_owned(),
             N2NErr::TooLarge { charset } => format!(
-                "input was too long to decode number; maximum: {}", charset.encode(std::u64::MAX)),
+                "input was too long to decode number; maximum: {}",
+                charset.encode(std::u64::MAX)
+            ),
             N2NErr::InvalidCharacter { character, charset } => format!(
                 "encountered invalid character '{}' while decoding to number; allowed: '{}'",
-                character, charset),
+                character, charset
+            ),
         }
     }
 }

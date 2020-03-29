@@ -1,11 +1,13 @@
-
 /// Return the lowercase representation character.
 /// Fails if the lowercase representation is not a single character.
 pub fn lower(character: char) -> char {
     let mut lc = character.to_lowercase();
     if lc.len() > 1 {
-        panic!("character {} is not allowed because its lower-case has more \
-        than one unicode code point ({})", character, lc);
+        panic!(
+            "character {} is not allowed because its lower-case has more \
+        than one unicode code point ({})",
+            character, lc
+        );
     }
     match lc.next() {
         Some(lc_char) => lc_char,

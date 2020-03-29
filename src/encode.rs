@@ -14,10 +14,7 @@ pub fn number2name(number: impl Into<u64>, charset: &Charset) -> String {
         }
         remainder -= 1;
     }
-    name.into_iter()
-        .map(|index| charset[index])
-        .rev()
-        .collect()
+    name.into_iter().map(|index| charset[index]).rev().collect()
 }
 
 #[cfg(test)]

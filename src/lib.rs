@@ -1,25 +1,24 @@
-
-mod util;
-mod typ;
-mod charset;
 mod builtin;
-mod encode;
+mod charset;
 mod decode;
+mod encode;
+mod typ;
+mod util;
 
-pub use crate::charset::Charset;
-pub use crate::typ::N2NErr;
-pub use crate::encode::number2name;
-pub use crate::decode::name2number;
-pub use crate::builtin::HEX;
-pub use crate::builtin::HEXLOWERCASE;
 pub use crate::builtin::BASE32;
-pub use crate::builtin::BASE32LOWERCASE;
-pub use crate::builtin::BASE32HUMAN;
 pub use crate::builtin::BASE32CROCKFORD;
-pub use crate::builtin::BASE32SCNY;
 pub use crate::builtin::BASE32HEX;
+pub use crate::builtin::BASE32HUMAN;
+pub use crate::builtin::BASE32LOWERCASE;
+pub use crate::builtin::BASE32SCNY;
 pub use crate::builtin::BASE64;
 pub use crate::builtin::BASE64URL;
+pub use crate::builtin::HEX;
+pub use crate::builtin::HEXLOWERCASE;
+pub use crate::charset::Charset;
+pub use crate::decode::name2number;
+pub use crate::encode::number2name;
+pub use crate::typ::N2NErr;
 
 #[cfg(test)]
 mod tests {
