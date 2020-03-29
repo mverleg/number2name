@@ -20,31 +20,16 @@ pub fn name2number<'a>(text: impl AsRef<str>, charset: &Charset) -> Result<u64, 
         match scale.checked_mul(size) {
             Some(new_scale) => {
                 scale = new_scale;
-                // Safe case.
                 let add = (value + 1) * scale;  //TODO @mark: TEMPORARY! REMOVE THIS!
                 dbg!(add);  //TODO @mverleg: remove
-                number += (value + 1) * scale;
-            },
-            None => {
-                // Near-overflow case.
-                dbg!("near-overflow");  //TODO @mverleg: remove
-                number = match number.checked_add(value * scale + scale) {
+                number = match number.checked_add((value + 1) * scale) {
                     Some(n) => n,
                     None => return Err(N2NErr::TooLarge { charset: charset.clone() }),
-                };
-                //TODO @mark: if any letter left, then this is too long... but maybe automatically happens on next iteration if scale is multiplied?
+                }
             },
+            None => return Err(N2NErr::TooLarge { charset: charset.clone() }),
         };
     }
-    // first_char = match text.chars().next() {>>
-    //     Some(c) => c,
-    //     None() => return Err(N2N::EmptyInput),
-    // };
-    // let value = match charset.index_of(character) {
-    //     Ok(i) => i,
-    //     Err(()) => return Err(N2NErr::InvalidCharacter { character, charset: charset.clone() }),
-    // };
-    // number += (value + 1) * scale;
     Ok(number)
 }
 
