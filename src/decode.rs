@@ -32,7 +32,7 @@ pub fn name2number<'a>(text: impl AsRef<str>, charset: &Charset) -> Result<u64, 
 fn get_index(character: char, charset: &Charset) -> Result<u64, N2NErr> {
     match charset.index_of(character) {
         Ok(i) => Ok(i),
-        Err(()) => return Err(N2NErr::InvalidCharacter { character, charset: charset.clone() }),
+        Err(()) => Err(N2NErr::InvalidCharacter { character, charset: charset.clone() }),
     }
 }
 

@@ -44,6 +44,7 @@ mod tests {
         Ok(())
     }
 
+    #[test]
     fn base32human() -> Result<(), ()> {
         assert_eq!(BASE32HUMAN[0], 'a');
         assert_eq!(BASE32HUMAN[31], '_');

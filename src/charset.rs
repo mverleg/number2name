@@ -164,7 +164,7 @@ mod tests {
         #[test]
         #[should_panic]
         fn panic_mode() {
-            let charset = Charset::case_insensitive("abBA");
+            Charset::case_insensitive("abBA");
         }
     }
 
