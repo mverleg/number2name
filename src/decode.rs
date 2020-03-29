@@ -4,31 +4,37 @@ use crate::typ::N2NErr;
 /// Convert a string encoded using the given charset back to the number it represents.
 pub fn name2number<'a>(text: impl AsRef<str>, charset: &Charset) -> Result<u64, N2NErr> {
     let text = text.as_ref();
-    if text.is_empty() {
-        return Err(N2NErr::EmptyInput)
-    }
     let size = charset.len() as u64;
-    let mut number = 0;
-    let mut scale = 1;
-    for character in text.chars().rev() {
-        let value = match charset.index_of(character) {
-            Ok(i) => i,
-            Err(()) => return Err(N2NErr::InvalidCharacter { character, charset: charset.clone() }),
-        };
-        let addition = (value + 1) * scale;
-        if std::u64::MAX - addition < number {
-            return Err(N2NErr::TooLarge { charset: charset.clone() })
-        }
-        number = match number.checked_add(value * scale + scale) {
-            Some(n) => n,
-            None => return Err(N2NErr::TooLarge { charset: charset.clone() }),
-        };
-        scale = match scale.checked_mul(size) {
-            Some(s) => s,
-            None => return Err(N2NErr::TooLarge { charset: charset.clone() }),
+    // Handle the first letter separately
+    let mut number = if let Some(first_char) = text.chars().rev().next() {
+        get_index(first_char, charset)? + 1
+    } else {
+        return Err(N2NErr::EmptyInput)
+    };
+    // Handle the other letters, with special case for near-overflow
+    let mut scale: u64 = 1;
+    for character in text.chars().rev().skip(1) {
+        dbg!(character);  //TODO @mverleg: remove
+        let value = get_index(character, charset)?;
+        dbg!(value);  //TODO @mverleg: remove
+        match scale.checked_mul(size) {
+            Some(s) => {
+                // Safe case.
+                number += (value + 1) * scale;
+                scale *= size;
+            },
+            None => {
+                // Near-overflow case.
+                dbg!("near-overflow");  //TODO @mverleg: remove
+                number = match number.checked_add(value * scale + scale) {
+                    Some(n) => n,
+                    None => return Err(N2NErr::TooLarge { charset: charset.clone() }),
+                };
+                //TODO @mark: if any letter left, then this is too long... but maybe automatically happens on next iteration if scale is multiplied?
+            },
         };
     }
-    // first_char = match text.chars().next() {
+    // first_char = match text.chars().next() {>>
     //     Some(c) => c,
     //     None() => return Err(N2N::EmptyInput),
     // };
@@ -38,6 +44,13 @@ pub fn name2number<'a>(text: impl AsRef<str>, charset: &Charset) -> Result<u64, 
     // };
     // number += (value + 1) * scale;
     Ok(number - 1)
+}
+
+fn get_index(character: char, charset: &Charset) -> Result<u64, N2NErr> {
+    match charset.index_of(character) {
+        Ok(i) => Ok(i),
+        Err(()) => return Err(N2NErr::InvalidCharacter { character, charset: charset.clone() }),
+    }
 }
 
 #[cfg(test)]
