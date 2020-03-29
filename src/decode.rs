@@ -7,7 +7,7 @@ pub fn name2number<'a>(text: impl AsRef<str>, charset: &Charset) -> Result<u64, 
     let size = charset.len() as u64;
     // Handle the first letter separately
     let mut number = if let Some(first_char) = text.chars().rev().next() {
-        get_index(first_char, charset)? + 1
+        get_index(first_char, charset)?
     } else {
         return Err(N2NErr::EmptyInput)
     };
@@ -18,10 +18,12 @@ pub fn name2number<'a>(text: impl AsRef<str>, charset: &Charset) -> Result<u64, 
         let value = get_index(character, charset)?;
         dbg!(value);  //TODO @mverleg: remove
         match scale.checked_mul(size) {
-            Some(s) => {
+            Some(new_scale) => {
+                scale = new_scale;
                 // Safe case.
+                let add = (value + 1) * scale;  //TODO @mark: TEMPORARY! REMOVE THIS!
+                dbg!(add);  //TODO @mverleg: remove
                 number += (value + 1) * scale;
-                scale *= size;
             },
             None => {
                 // Near-overflow case.
@@ -43,7 +45,7 @@ pub fn name2number<'a>(text: impl AsRef<str>, charset: &Charset) -> Result<u64, 
     //     Err(()) => return Err(N2NErr::InvalidCharacter { character, charset: charset.clone() }),
     // };
     // number += (value + 1) * scale;
-    Ok(number - 1)
+    Ok(number)
 }
 
 fn get_index(character: char, charset: &Charset) -> Result<u64, N2NErr> {
