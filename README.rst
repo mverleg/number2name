@@ -17,10 +17,10 @@ For a character set 'abc', the series is::
     3 aa
     4 ab
     ...
-    11 cb
-    12 cc
-    13 aaa
-    14 aab
+    10 cb
+    11 cc
+    12 aaa
+    13 aab
 
 Note that this is slightly different from base3 with leading characters stripped::
 

@@ -1,8 +1,8 @@
 use crate::Charset;
 use crate::typ::N2NErr;
 
-pub fn name2number<'a>(text: impl Into<&'a str>, charset: &Charset) -> Result<u64, N2NErr> {
-    let text = text.into();
+pub fn name2number<'a>(text: impl AsRef<str>, charset: &Charset) -> Result<u64, N2NErr> {
+    let text = text.as_ref();
     let size = charset.len() as u64;
     let mut number = 0;
     let mut scale = 1;

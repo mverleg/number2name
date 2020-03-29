@@ -46,16 +46,16 @@ impl fmt::Display for Charset {
 /// A character set of unique characters in a specific order.
 /// If case-insensitive, characters must have a single-character lower-case version (can be the same as upper-case).
 impl Charset {
-    pub fn case_sensitive<'a>(data: impl Into<&'a str>) -> Self {
+    pub fn case_sensitive<'a>(data: impl AsRef<str>) -> Self {
         Charset::new(data, Case::Sensitive)
     }
 
-    pub fn case_insensitive<'a>(data: impl Into<&'a str>) -> Self {
+    pub fn case_insensitive<'a>(data: impl AsRef<str>) -> Self {
         Charset::new(data, Case::Insensitive)
     }
 
     /// Panics if the input contains duplicates.
-    pub fn new<'a>(data: impl Into<&'a str>, case: Case) -> Self {
+    pub fn new<'a>(data: impl AsRef<str>, case: Case) -> Self {
         match Charset::try_new(data, case) {
             Some(charset) => charset,
             None => panic!("failed to initialize charset due to duplicate data"),
@@ -63,8 +63,8 @@ impl Charset {
     }
 
     /// Empty if the input contains duplicates.
-    pub fn try_new<'a>(data: impl Into<&'a str>, case: Case) -> Option<Self> {
-        let data = data.into();
+    pub fn try_new<'a>(data: impl AsRef<str>, case: Case) -> Option<Self> {
+        let data = data.as_ref();
         assert!(data.len() > 0);
         let mut seen = HashSet::new();
         let mut values = Vec::with_capacity(data.len());
@@ -106,7 +106,7 @@ impl Charset {
         number2name(number, &self)
     }
 
-    pub fn decode<'a>(&self, text: impl Into<&'a str>) -> Result<u64, N2NErr> {
+    pub fn decode<'a>(&self, text: impl AsRef<str>) -> Result<u64, N2NErr> {
         name2number(text, &self)
     }
 }
