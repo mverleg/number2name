@@ -63,19 +63,11 @@ You can easily use your own character sets using `number2name::Charset`.
 
 Or use one of the built-in ones:
 
-* **HEX**
+* **HEX** (case-insensitive) / **HEXLOWERCASE** (case-sensitive)
 
     0123456789abcdef
     
-* **HEXLOWERCASE** (case-sensitive)
-
-    0123456789abcdef
-    
-* **BASE32**
-
-    ABCDEFGHIJKLMNOPQRSTUVWXYZ234567
-    
-* **BASE32LOWERCASE** (case-sensitive)
+* **BASE32** (case-insensitive) / **BASE32LOWERCASE** (case-sensitive)
 
     ABCDEFGHIJKLMNOPQRSTUVWXYZ234567
     
@@ -110,5 +102,5 @@ Notes
 * It's generally pretty fast, but if performance is critical:
 
   - Re-use the Charset instances (automatic for built-in ones)
-  - Use case-sensitive character sets where possible (_CS postfix)
+  - Use case-sensitive character sets where possible
 
