@@ -193,7 +193,6 @@ mod tests {
     mod index_of {
         use super::*;
 
-
         #[test]
         fn case_sensitive() -> Result<(), ()> {
             let charset = Charset::case_sensitive("abBA");
@@ -211,6 +210,59 @@ mod tests {
             assert_eq!(charset.index_of('b')?, 1);
             assert_eq!(charset.index_of('C')?, 2);
             assert_eq!(charset.index_of('d')?, 3);
+            Ok(())
+        }
+
+        #[test]
+        fn do_not_ignore_case() -> Result<(), ()> {
+            let charset = Charset::case_sensitive("Ab");
+            assert!(charset.index_of('a').is_err());
+            assert!(charset.index_of('B').is_err());
+            Ok(())
+        }
+
+        #[test]
+        fn ignore_case_digit() -> Result<(), ()> {
+            let charset = Charset::case_insensitive("0123456789");
+            assert_eq!(charset.index_of('0')?, 0);
+            assert_eq!(charset.index_of('1')?, 1);
+            assert_eq!(charset.index_of('2')?, 2);
+            assert_eq!(charset.index_of('3')?, 3);
+            assert_eq!(charset.index_of('4')?, 4);
+            assert_eq!(charset.index_of('5')?, 5);
+            assert_eq!(charset.index_of('6')?, 6);
+            assert_eq!(charset.index_of('7')?, 7);
+            assert_eq!(charset.index_of('8')?, 8);
+            assert_eq!(charset.index_of('9')?, 9);
+            Ok(())
+        }
+
+        #[test]
+        fn ignore_case_single() -> Result<(), ()> {
+            let charset = Charset::case_insensitive("A");
+            assert_eq!(charset.index_of('a')?, 0);
+            Ok(())
+        }
+
+        #[test]
+        fn ignore_case_long() -> Result<(), ()> {
+            let charset = Charset::case_insensitive("AbCdEfGhIjKlMnOp");
+            assert_eq!(charset.index_of('a')?, 0);
+            assert_eq!(charset.index_of('B')?, 1);
+            assert_eq!(charset.index_of('c')?, 2);
+            assert_eq!(charset.index_of('D')?, 3);
+            assert_eq!(charset.index_of('e')?, 4);
+            assert_eq!(charset.index_of('F')?, 5);
+            assert_eq!(charset.index_of('g')?, 6);
+            assert_eq!(charset.index_of('H')?, 7);
+            assert_eq!(charset.index_of('i')?, 8);
+            assert_eq!(charset.index_of('J')?, 9);
+            assert_eq!(charset.index_of('k')?, 10);
+            assert_eq!(charset.index_of('L')?, 11);
+            assert_eq!(charset.index_of('m')?, 12);
+            assert_eq!(charset.index_of('N')?, 13);
+            assert_eq!(charset.index_of('o')?, 14);
+            assert_eq!(charset.index_of('P')?, 15);
             Ok(())
         }
     }
