@@ -20,15 +20,15 @@ pub use crate::builtin::BASE64URL;
 
 #[cfg(test)]
 mod tests {
-    use crate::Charset;
+    use crate::{Charset, N2NErr};
 
     #[test]
-    fn demo() {
+    fn demo() -> Result<(), N2NErr> {
         let charset = Charset::case_insensitive("abc");
-        let text = charset.encode(14);
+        let text = charset.encode(13);
         assert_eq!(text, "aab");
-        //TODO @mark: remove unwraps from tests
-        let nr = charset.decode(text).unwrap();
-        assert_eq!(nr, 14);
+        let nr = charset.decode(text)?;
+        assert_eq!(nr, 13);
+        Ok(())
     }
 }

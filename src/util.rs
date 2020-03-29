@@ -3,12 +3,14 @@
 /// Fails if the lowercase representation is not a single character.
 pub fn lower(character: char) -> char {
     let mut lc = character.to_lowercase();
-    assert!(lc.len() > 0);
     if lc.len() > 1 {
         panic!("character {} is not allowed because its lower-case has more \
         than one unicode code point ({})", character, lc);
     }
-    lc.next().unwrap()
+    match lc.next() {
+        Some(lc_char) => lc_char,
+        None => panic!("no lower-case representation found"),
+    }
 }
 
 #[cfg(test)]
