@@ -92,6 +92,19 @@ impl Charset {
         self.values.len()
     }
 
+    /// Find the numberical position of a character.
+    //TODO @mark: tests
+    pub fn index_of(&self, character: char) -> Result<u64, ()> {
+        //TODO @mark: faster
+        //TODO @mark: case-insensitive mode?
+        for i in 0..self.values.len() {
+            if self.values[i] == character {
+                return Ok(i as u64);
+            }
+        }
+        Err(())
+    }
+
     pub fn encode(&self, number: u64) -> String {
         number2name(number, &self)
     }
