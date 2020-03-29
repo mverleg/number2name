@@ -2,7 +2,7 @@ use crate::Charset;
 use crate::typ::N2NErr;
 
 /// Convert a string encoded using the given charset back to the number it represents.
-pub fn name2number<'a>(text: impl AsRef<str>, charset: &Charset) -> Result<u64, N2NErr> {
+pub fn name2number(text: impl AsRef<str>, charset: &Charset) -> Result<u64, N2NErr> {
     let text = text.as_ref();
     let size = charset.len() as u64;
     // Handle the first letter separately

@@ -47,27 +47,30 @@ impl fmt::Display for Charset {
 
 /// A character set of unique characters in a specific order.
 /// If case-insensitive, characters must have a single-character lower-case version (can be the same as upper-case).
+#[allow(clippy::len_without_is_empty)]
 impl Charset {
-    pub fn case_sensitive<'a>(data: impl AsRef<str>) -> Self {
+    pub fn case_sensitive(data: impl AsRef<str>) -> Self {
         Charset::new(data, Case::Sensitive)
     }
 
-    pub fn case_insensitive<'a>(data: impl AsRef<str>) -> Self {
+    pub fn case_insensitive(data: impl AsRef<str>) -> Self {
         Charset::new(data, Case::Insensitive)
     }
 
     /// Panics if the input contains duplicates.
-    pub fn new<'a>(data: impl AsRef<str>, case: Case) -> Self {
+    pub fn new(data: impl AsRef<str>, case: Case) -> Self {
         match Charset::try_new(data, case) {
             Some(charset) => charset,
             None => panic!("failed to initialize charset due to duplicate data"),
         }
     }
 
-    /// Empty if the input contains duplicates.
-    pub fn try_new<'a>(data: impl AsRef<str>, case: Case) -> Option<Self> {
+    /// Empty if the input contains duplicates or is empty.
+    pub fn try_new(data: impl AsRef<str>, case: Case) -> Option<Self> {
         let data = data.as_ref();
-        assert!(data.len() > 0);
+        if data.is_empty() {
+            return None;
+        }
         let mut lookup = HashMap::new();
         let mut values = Vec::with_capacity(data.len());
         for (index, character) in data.chars().enumerate() {
@@ -108,7 +111,7 @@ impl Charset {
         number2name(number, &self)
     }
 
-    pub fn decode<'a>(&self, text: impl AsRef<str>) -> Result<u64, N2NErr> {
+    pub fn decode(&self, text: impl AsRef<str>) -> Result<u64, N2NErr> {
         name2number(text, &self)
     }
 }

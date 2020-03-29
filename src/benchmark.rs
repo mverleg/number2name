@@ -3,6 +3,7 @@ use ::criterion::{black_box, criterion_group, criterion_main, Criterion};
 use ::number2name::Charset;
 use ::number2name::BASE32HUMAN;
 
+#[allow(clippy::zero_prefixed_literal)]
 pub fn encode(c: &mut Criterion) {
     let charset: &Charset = &*BASE32HUMAN;
     c.bench_function("encoding", |b| b.iter(|| {
@@ -109,6 +110,7 @@ pub fn encode(c: &mut Criterion) {
     }));
 }
 
+#[allow(clippy::zero_prefixed_literal)]
 pub fn decode_case_sensitive(c: &mut Criterion) {
     let charset = Charset::case_sensitive("abcdefghjkmnpqrstuvwxyz23456789_");
     c.bench_function("decoding CS", |b| b.iter(|| {
@@ -215,6 +217,7 @@ pub fn decode_case_sensitive(c: &mut Criterion) {
     }));
 }
 
+#[allow(clippy::zero_prefixed_literal)]
 pub fn decode_case_insensitive(c: &mut Criterion) {
     let charset: &Charset = &*BASE32HUMAN;
     c.bench_function("decoding CI", |b| b.iter(|| {
