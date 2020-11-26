@@ -51,18 +51,25 @@ pub fn main() {
 }
 
 fn go(args: &Nr2NameArgs) -> Result<(), String> {
-
     let charset = charset_by_identifier(&args.charset)?;
 
     for nr_txt in &args.names {
         if args.signed {
-            let nr: i128 = nr_txt.parse()
-                .map_err(|_| format!("The input '{}' was not recognized as a valid number", &nr_txt))?;
+            let nr: i128 = nr_txt.parse().map_err(|_| {
+                format!(
+                    "The input '{}' was not recognized as a valid number",
+                    &nr_txt
+                )
+            })?;
             let txt = number2name_i128(nr, &charset);
             println!("{}", txt);
         } else {
-            let nr: u128 = nr_txt.parse()
-                .map_err(|_| format!("The input '{}' was not recognized as a valid unsigned number", &nr_txt))?;
+            let nr: u128 = nr_txt.parse().map_err(|_| {
+                format!(
+                    "The input '{}' was not recognized as a valid unsigned number",
+                    &nr_txt
+                )
+            })?;
             let txt = number2name_u128(nr, &charset);
             println!("{}", txt);
         }

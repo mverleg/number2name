@@ -4,7 +4,7 @@ use ::std::fmt::{Formatter, Write};
 use ::std::ops::Index;
 
 use crate::decode::name2number;
-use crate::encode::{number2name_u128, number2name_u64, number2name_u32, number2name_u16};
+use crate::encode::{number2name_u128, number2name_u16, number2name_u32, number2name_u64};
 use crate::typ::N2NErr;
 use crate::util::lower;
 

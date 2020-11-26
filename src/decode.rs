@@ -1,5 +1,7 @@
 use crate::typ::N2NErr;
-use crate::{Charset, unsigned2signed_16, unsigned2signed_32, unsigned2signed_64, unsigned2signed_128};
+use crate::{
+    unsigned2signed_128, unsigned2signed_16, unsigned2signed_32, unsigned2signed_64, Charset,
+};
 
 macro_rules! name2number_for_type {
     ($name: ident, $int:ty) => {
@@ -48,7 +50,7 @@ macro_rules! name2number_for_type {
             }
             Ok(number)
         }
-    }
+    };
 }
 
 name2number_for_type!(name2number_u16, u16);
@@ -69,7 +71,10 @@ pub fn name2number_i64(text: impl AsRef<str>, charset: &Charset) -> Result<i64, 
 }
 
 pub fn name2number_i128(text: impl AsRef<str>, charset: &Charset) -> Result<i128, N2NErr> {
-    Ok(unsigned2signed_128(name2number_u128(text.as_ref(), charset)?))
+    Ok(unsigned2signed_128(name2number_u128(
+        text.as_ref(),
+        charset,
+    )?))
 }
 
 /// Convert a string encoded using the given charset back to the number it represents.

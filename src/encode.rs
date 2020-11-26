@@ -1,4 +1,6 @@
-use crate::{Charset, signed2unsigned_16, signed2unsigned_32, signed2unsigned_64, signed2unsigned_128};
+use crate::{
+    signed2unsigned_128, signed2unsigned_16, signed2unsigned_32, signed2unsigned_64, Charset,
+};
 
 macro_rules! number2name_for_type {
     ($name: ident, $int:ty) => {
@@ -18,7 +20,7 @@ macro_rules! number2name_for_type {
             }
             name.into_iter().map(|index| charset[index]).rev().collect()
         }
-    }
+    };
 }
 
 number2name_for_type!(number2name_u16, u16);

@@ -1,4 +1,3 @@
-
 macro_rules! signed2unsigned_for_type {
     ($names2u: ident, $nameu2s: ident, $src: ty, $trgt: ty, $test_name: ident) => {
         pub fn $names2u(number: $src) -> $trgt {
@@ -64,14 +63,20 @@ macro_rules! signed2unsigned_for_type {
                 assert_eq!($nameu2s(2467), -1234);
             }
         }
-    }
+    };
 }
 
 // Not-string-based macros are great until this...
 signed2unsigned_for_type!(signed2unsigned_16, unsigned2signed_16, i16, u16, type_16);
 signed2unsigned_for_type!(signed2unsigned_32, unsigned2signed_32, i32, u32, type_32);
 signed2unsigned_for_type!(signed2unsigned_64, unsigned2signed_64, i64, u64, type_64);
-signed2unsigned_for_type!(signed2unsigned_128, unsigned2signed_128, i128, u128, type_128);
+signed2unsigned_for_type!(
+    signed2unsigned_128,
+    unsigned2signed_128,
+    i128,
+    u128,
+    type_128
+);
 
 /// Map a signed integer to an unsigned one, in a way that
 /// * is bijective (reversible).

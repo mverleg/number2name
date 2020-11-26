@@ -51,17 +51,14 @@ pub fn main() {
 }
 
 fn go(args: &Name2NrArgs) -> Result<(), String> {
-
     let charset = charset_by_identifier(&args.charset)?;
 
     for name in &args.names {
         if args.signed {
-            let nr = name2number_i128(name, &charset)
-                .map_err(|err| err.as_string())?;
+            let nr = name2number_i128(name, &charset).map_err(|err| err.as_string())?;
             println!("{}", nr);
         } else {
-            let nr = name2number_u128(name, &charset)
-                .map_err(|err| err.as_string())?;
+            let nr = name2number_u128(name, &charset).map_err(|err| err.as_string())?;
             println!("{}", nr);
         }
     }
