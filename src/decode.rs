@@ -56,8 +56,6 @@ name2number_for_type!(name2number_u32, u32);
 name2number_for_type!(name2number_u64, u64);
 name2number_for_type!(name2number_u128, u128);
 
-//TODO @mark: tests for different types?
-
 pub fn name2number_i16(text: impl AsRef<str>, charset: &Charset) -> Result<i16, N2NErr> {
     Ok(unsigned2signed_16(name2number_u16(text.as_ref(), charset)?))
 }
@@ -257,14 +255,6 @@ mod tests {
     }
 
     #[test]
-    fn near_overflow() -> Result<(), N2NErr> {
-        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
-        let nr = name2number("gkgwByLwRXTLPP", &charset)?;
-        assert_eq!(nr, std::u64::MAX);
-        Ok(())
-    }
-
-    #[test]
     fn too_long() -> Result<(), N2NErr> {
         let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
         match name2number("aaaaaaaaaaaaaaa", &charset).unwrap_err() {
@@ -292,6 +282,129 @@ mod tests {
             _ => panic!("wrong error"),
         }
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod type_u16 {
+    use super::*;
+    use crate::Charset;
+
+    #[test]
+    fn unsigned() {
+        let charset = Charset::case_sensitive("aBcD");
+        let nr = name2number_u16("aaa", &charset).unwrap();
+        assert_eq!(nr, 4u16 + 16u16);
+    }
+
+    #[test]
+    fn signed() {
+        let charset = Charset::case_sensitive("aBcD");
+        let nr = name2number_i16("aBB", &charset).unwrap();
+        assert_eq!(nr, -13i16);
+    }
+
+    #[test]
+    fn unsigned_maximum() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        let nr = name2number_u16("cRXP", &charset).unwrap();
+        assert_eq!(nr, ::std::u16::MAX);
+    }
+
+    #[test]
+    fn signed_maximum() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        let nr = name2number_i16("cRXo", &charset).unwrap();
+        assert_eq!(nr, ::std::i16::MAX);
+    }
+
+    #[test]
+    fn signed_minimum() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        let nr = name2number_i16("cRXP", &charset).unwrap();
+        assert_eq!(nr, ::std::i16::MIN);
+    }
+}
+
+#[cfg(test)]
+mod type_u32 {
+    use super::*;
+    use crate::Charset;
+
+    #[test]
+    fn unsigned() {
+        let charset = Charset::case_sensitive("aBcD");
+        let nr = name2number_u32("aaa", &charset).unwrap();
+        assert_eq!(nr, 4u32 + 16u32);
+    }
+
+    #[test]
+    fn signed() {
+        let charset = Charset::case_sensitive("aBcD");
+        let nr = name2number_i32("aBB", &charset).unwrap();
+        assert_eq!(nr, -13i32);
+    }
+
+    #[test]
+    fn unsigned_maximum() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        let nr = name2number_u32("mwLqkwV", &charset).unwrap();
+        assert_eq!(nr, ::std::u32::MAX);
+    }
+
+    #[test]
+    fn signed_maximum() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        let nr = name2number_i32("mwLqkwu", &charset).unwrap();
+        assert_eq!(nr, ::std::i32::MAX);
+    }
+
+    #[test]
+    fn signed_minimum() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        let nr = name2number_i32("mwLqkwV", &charset).unwrap();
+        assert_eq!(nr, ::std::i32::MIN);
+    }
+}
+
+#[cfg(test)]
+mod type_u64 {
+    use super::*;
+    use crate::Charset;
+
+    #[test]
+    fn unsigned() {
+        let charset = Charset::case_sensitive("aBcD");
+        let nr = name2number_u64("aaa", &charset).unwrap();
+        assert_eq!(nr, 4u64 + 16u64);
+    }
+
+    #[test]
+    fn signed() {
+        let charset = Charset::case_sensitive("aBcD");
+        let nr = name2number_i64("aBB", &charset).unwrap();
+        assert_eq!(nr, -13i64);
+    }
+
+    #[test]
+    fn unsigned_maximum() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        let nr = name2number_u64("gkgwByLwRXTLPP", &charset).unwrap();
+        assert_eq!(nr, ::std::u64::MAX);
+    }
+
+    #[test]
+    fn signed_maximum() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        let nr = name2number_i64("gkgwByLwRXTLPo", &charset).unwrap();
+        assert_eq!(nr, ::std::i64::MAX);
+    }
+
+    #[test]
+    fn signed_minimum() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        let nr = name2number_i64("gkgwByLwRXTLPP", &charset).unwrap();
+        assert_eq!(nr, ::std::i64::MIN);
     }
 }
 

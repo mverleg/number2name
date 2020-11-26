@@ -56,13 +56,12 @@ fn go(args: &Name2NrArgs) -> Result<(), String> {
 
     for name in &args.names {
         if args.signed {
-            //TODO @mark: i128
-            let nr = name2number(name, &charset)
+            let nr = name2number_i128(name, &charset)
                 .map_err(|err| err.to_string())?;
             println!("{}", nr);
         } else {
             //TODO @mark: u128
-            let nr = name2number(name, &charset)
+            let nr = name2number_u128(name, &charset)
                 .map_err(|err| err.to_string())?;
             println!("{}", nr);
         }
