@@ -7,6 +7,11 @@ use crate::decode::name2number;
 use crate::encode::{number2name_u128, number2name_u16, number2name_u32, number2name_u64};
 use crate::typ::N2NErr;
 use crate::util::lower;
+use crate::{
+    name2number_i128, name2number_i16, name2number_i32, name2number_i64, name2number_u128,
+    name2number_u16, name2number_u32, name2number_u64, number2name_i128, number2name_i16,
+    number2name_i32, number2name_i64,
+};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Case {
@@ -126,8 +131,56 @@ impl Charset {
         number2name_u128(number, &self)
     }
 
+    pub fn encode_i16(&self, number: i16) -> String {
+        number2name_i16(number, &self)
+    }
+
+    pub fn encode_i32(&self, number: i32) -> String {
+        number2name_i32(number, &self)
+    }
+
+    pub fn encode_i64(&self, number: i64) -> String {
+        number2name_i64(number, &self)
+    }
+
+    pub fn encode_i128(&self, number: i128) -> String {
+        number2name_i128(number, &self)
+    }
+
     pub fn decode(&self, text: impl AsRef<str>) -> Result<u64, N2NErr> {
         name2number(text, &self)
+    }
+
+    pub fn decode_u16(&self, text: impl AsRef<str>) -> Result<u16, N2NErr> {
+        name2number_u16(text, &self)
+    }
+
+    pub fn decode_u32(&self, text: impl AsRef<str>) -> Result<u32, N2NErr> {
+        name2number_u32(text, &self)
+    }
+
+    pub fn decode_u64(&self, text: impl AsRef<str>) -> Result<u64, N2NErr> {
+        name2number_u64(text, &self)
+    }
+
+    pub fn decode_u128(&self, text: impl AsRef<str>) -> Result<u128, N2NErr> {
+        name2number_u128(text, &self)
+    }
+
+    pub fn decode_i16(&self, text: impl AsRef<str>) -> Result<i16, N2NErr> {
+        name2number_i16(text, &self)
+    }
+
+    pub fn decode_i32(&self, text: impl AsRef<str>) -> Result<i32, N2NErr> {
+        name2number_i32(text, &self)
+    }
+
+    pub fn decode_i64(&self, text: impl AsRef<str>) -> Result<i64, N2NErr> {
+        name2number_i64(text, &self)
+    }
+
+    pub fn decode_i128(&self, text: impl AsRef<str>) -> Result<i128, N2NErr> {
+        name2number_i128(text, &self)
     }
 }
 

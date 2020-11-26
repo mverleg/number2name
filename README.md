@@ -1,5 +1,5 @@
 
-number2name (Rust library)
+number2name
 ===============================
 
 This is a simple Rust library to convert an index to a name that is as short as possible.
