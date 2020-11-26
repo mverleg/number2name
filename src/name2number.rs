@@ -51,19 +51,18 @@ pub fn main() {
 
 fn go(args: &Name2NrArgs) -> Result<(), String> {
 
-    //TODO @mark:
     let charset = charset_by_identifier(&args.charset);
 
-    for name in args.names {
+    for name in &args.names {
         if args.unsigned {
             //TODO @mark: u128
-            let nr = name2number(&name, &charset)
-                .map_err(|err| String::from(err))?;
+            let nr = name2number(name, &charset)
+                .map_err(|err| err.to_string())?;
             println!("{}", nr);
         } else {
             //TODO @mark: i128
-            let nr = name2number(&name, &charset)
-                .map_err(|err| String::from(err))?;
+            let nr = name2number(name, &charset)
+                .map_err(|err| err.to_string())?;
             println!("{}", nr);
         }
     }

@@ -7,8 +7,8 @@ pub enum N2NErr {
     InvalidCharacter { character: char, charset: Charset },
 }
 
-impl Into<String> for N2NErr {
-    fn into(self) -> String {
+impl N2NErr {
+    pub fn to_string(&self) -> String {
         match self {
             N2NErr::EmptyInput => "input was empty while decoding".to_owned(),
             N2NErr::TooLarge { charset } => format!(
@@ -20,5 +20,11 @@ impl Into<String> for N2NErr {
                 character, charset
             ),
         }
+    }
+}
+
+impl Into<String> for N2NErr {
+    fn into(self) -> String {
+        self.to_string()
     }
 }
