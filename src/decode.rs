@@ -294,3 +294,44 @@ mod tests {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod type_u128 {
+    use super::*;
+    use crate::Charset;
+
+    #[test]
+    fn unsigned() {
+        let charset = Charset::case_sensitive("aBcD");
+        let nr = name2number_u128("aaa", &charset).unwrap();
+        assert_eq!(nr, 4u128 + 16u128);
+    }
+
+    #[test]
+    fn signed() {
+        let charset = Charset::case_sensitive("aBcD");
+        let nr = name2number_i128("aBB", &charset).unwrap();
+        assert_eq!(nr, -13i128);
+    }
+
+    #[test]
+    fn unsigned_maximum() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        let nr = name2number_u128("BcgDeNLqRqwDsLRugsNLBTmFiJaV", &charset).unwrap();
+        assert_eq!(nr, ::std::u128::MAX);
+    }
+
+    #[test]
+    fn signed_maximum() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        let nr = name2number_i128("BcgDeNLqRqwDsLRugsNLBTmFiJau", &charset).unwrap();
+        assert_eq!(nr, ::std::i128::MAX);
+    }
+
+    #[test]
+    fn signed_minimum() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        let nr = name2number_i128("BcgDeNLqRqwDsLRugsNLBTmFiJaV", &charset).unwrap();
+        assert_eq!(nr, ::std::i128::MIN);
+    }
+}
