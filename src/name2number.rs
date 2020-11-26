@@ -4,7 +4,7 @@ use ::std::process::exit;
 
 use ::structopt::StructOpt;
 
-use ::number2name::name2number;
+use ::number2name::{name2number_i128, name2number_u128};
 
 use crate::cli_util::charset_by_identifier;
 
@@ -60,7 +60,6 @@ fn go(args: &Name2NrArgs) -> Result<(), String> {
                 .map_err(|err| err.to_string())?;
             println!("{}", nr);
         } else {
-            //TODO @mark: u128
             let nr = name2number_u128(name, &charset)
                 .map_err(|err| err.to_string())?;
             println!("{}", nr);

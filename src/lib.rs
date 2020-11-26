@@ -10,6 +10,14 @@
 #[cfg(feature = "builtin-charsets")] pub use crate::builtin::HEXLOWERCASE;
 pub use crate::charset::Charset;
 pub use crate::decode::name2number;
+pub use crate::decode::name2number_i128;
+pub use crate::decode::name2number_i16;
+pub use crate::decode::name2number_i32;
+pub use crate::decode::name2number_i64;
+pub use crate::decode::name2number_u128;
+pub use crate::decode::name2number_u16;
+pub use crate::decode::name2number_u32;
+pub use crate::decode::name2number_u64;
 pub use crate::encode::number2name;
 pub use crate::encode::number2name_i128;
 pub use crate::encode::number2name_i16;
