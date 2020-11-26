@@ -1,7 +1,7 @@
 
 macro_rules! signed2unsigned_for_type {
-    ($name: ident, $src: ty, $trgt: ty, $test_name: ident) => {
-        pub fn $name(number: $src) -> $trgt {
+    ($names2u: ident, $nameu2s: ident, $src: ty, $trgt: ty, $test_name: ident) => {
+        pub fn $names2u(number: $src) -> $trgt {
             if number >= 0 {
                 2 * (number as $trgt)
             } else {
@@ -11,37 +11,48 @@ macro_rules! signed2unsigned_for_type {
             }
         }
 
+        pub fn $nameu2s(number: $trgt) -> $src {
+            if number % 2 == 0 {
+                // Even numbers are positive
+                (number as $trgt) as $src / 2
+            } else {
+                // Odd numbers are negative
+                (-(((number - 1) / 2) as $src)) - 1
+            }
+        }
+
         #[cfg(test)]
         mod $test_name {
             use super::*;
 
             #[test]
             fn zero() {
-                assert_eq!($name(0), 0);
+                assert_eq!($names2u(0), 0);
+                assert_eq!($nameu2s(0), 0);
             }
 
             #[test]
-            fn positive() {
-                assert_eq!($name(1), 2);
-                assert_eq!($name(15), 30);
-                assert_eq!($name(1234), 2468);
+            fn positive_s2u() {
+                assert_eq!($names2u(1), 2);
+                assert_eq!($names2u(15), 30);
+                assert_eq!($names2u(1234), 2468);
             }
 
             #[test]
-            fn negative() {
-                assert_eq!($name(-1), 1);
-                assert_eq!($name(-15), 29);
-                assert_eq!($name(-1234), 2467);
+            fn negative_s2u() {
+                assert_eq!($names2u(-1), 1);
+                assert_eq!($names2u(-15), 29);
+                assert_eq!($names2u(-1234), 2467);
             }
         }
     }
 }
 
 // Not-string-based macros are great until this...
-signed2unsigned_for_type!(signed2unsigned_16, i16, u16, type_16);
-signed2unsigned_for_type!(signed2unsigned_32, i32, u32, type_32);
-signed2unsigned_for_type!(signed2unsigned_64, i64, u64, type_64);
-signed2unsigned_for_type!(signed2unsigned_128, i128, u128, type_128);
+signed2unsigned_for_type!(signed2unsigned_16, unsigned2signed_16, i16, u16, type_16);
+signed2unsigned_for_type!(signed2unsigned_32, unsigned2signed_32, i32, u32, type_32);
+signed2unsigned_for_type!(signed2unsigned_64, unsigned2signed_64, i64, u64, type_64);
+signed2unsigned_for_type!(signed2unsigned_128, unsigned2signed_128, i128, u128, type_128);
 
 /// Map a signed integer to an unsigned one, in a way that
 /// * is bijective (reversible).
@@ -57,6 +68,11 @@ signed2unsigned_for_type!(signed2unsigned_128, i128, u128, type_128);
 /// +3 -> 6
 /// +4 -> 8
 pub fn signed2unsigned(number: i64) -> u64 {
+    signed2unsigned_64(number)
+}
+
+/// Inverse of `signed2unsigned`.
+pub fn unsigned2signed(number: i64) -> u64 {
     signed2unsigned_64(number)
 }
 

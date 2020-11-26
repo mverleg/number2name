@@ -1,13 +1,3 @@
-
-#[cfg(feature = "builtin-charsets")]
-mod builtin;
-mod charset;
-mod decode;
-mod encode;
-mod typ;
-mod util;
-mod signs;
-
 #[cfg(feature = "builtin-charsets")] pub use crate::builtin::BASE32;
 #[cfg(feature = "builtin-charsets")] pub use crate::builtin::BASE32CROCKFORD;
 #[cfg(feature = "builtin-charsets")] pub use crate::builtin::BASE32HEX;
@@ -21,11 +11,28 @@ mod signs;
 pub use crate::charset::Charset;
 pub use crate::decode::name2number;
 pub use crate::encode::number2name;
+pub use crate::encode::number2name_u128;
 pub use crate::encode::number2name_u16;
 pub use crate::encode::number2name_u32;
 pub use crate::encode::number2name_u64;
-pub use crate::encode::number2name_u128;
+pub use crate::signs::signed2unsigned_128;
+pub use crate::signs::signed2unsigned_16;
+pub use crate::signs::signed2unsigned_32;
+pub use crate::signs::signed2unsigned_64;
+pub use crate::signs::unsigned2signed_128;
+pub use crate::signs::unsigned2signed_16;
+pub use crate::signs::unsigned2signed_32;
+pub use crate::signs::unsigned2signed_64;
 pub use crate::typ::N2NErr;
+
+#[cfg(feature = "builtin-charsets")]
+mod builtin;
+mod charset;
+mod decode;
+mod encode;
+mod typ;
+mod util;
+mod signs;
 
 #[cfg(test)]
 mod tests {
