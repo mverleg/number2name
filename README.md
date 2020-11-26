@@ -95,8 +95,15 @@ Or use one of the built-in ones (make sure to import from this library, e.g. `us
 
     ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_
 
+Integer types
+------------------------------- 
+
+* The default method works on 64 bit unsigned integers.
+* Some other unsigned types are available as e.g. `charset.encode_u128(...)`. 
+* Signed integers are currently not supported (PRs welcome).
+
 Mini version
--------------------------------    
+------------------------------- 
 
 If filesize (or compile time) is important, you can build this libary without any dependencies using at all, using `--no-default-features`. This means the built-in charsets are not available, you will need to construct your own (described above).
 

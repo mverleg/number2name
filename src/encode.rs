@@ -1,25 +1,9 @@
 use crate::Charset;
 
-/// Convert a number to a short string representation using the given character set.
-pub fn number2name(number: impl Into<u64>, charset: &Charset) -> String {
-    let size = charset.len() as u64;
-    let mut remainder = number.into();
-    let mut name = Vec::new();
-    loop {
-        let index = remainder % size;
-        name.push(index as usize);
-        remainder /= size;
-        if remainder == 0 {
-            break;
-        }
-        remainder -= 1;
-    }
-    name.into_iter().map(|index| charset[index]).rev().collect()
-}
-
 macro_rules! number2name_for_type {
-    ($int:ty) => {
-        pub fn number2name$int(number: impl Into<$int>, charset: &Charset) -> String {
+    ($name: ident, $int:ty) => {
+        /// Convert a number to a short string representation using the given character set.
+        pub fn $name(number: impl Into<$int>, charset: &Charset) -> String {
             let size = charset.len() as $int;
             let mut remainder = number.into();
             let mut name = Vec::new();
@@ -37,8 +21,20 @@ macro_rules! number2name_for_type {
     }
 }
 
+//TODO @mark: range tests for types
+number2name_for_type!(number2name_u16, u32);
+number2name_for_type!(number2name_u32, u32);
+number2name_for_type!(number2name_u64, u64);
+number2name_for_type!(number2name_u128, u128);
+
+/// Convert a number to a short string representation using the given character set.
+pub fn number2name(number: impl Into<u64>, charset: &Charset) -> String {
+    // compiler, please inline this!
+    number2name_u64(number, charset)
+}
+
 #[cfg(test)]
-mod tests {
+mod general {
     use super::*;
     use crate::Charset;
 
@@ -125,11 +121,84 @@ mod tests {
         let text = number2name(7u64, &charset);
         assert_eq!(text, "00000000");
     }
+}
+
+#[cfg(test)]
+mod type_u16 {
+    use super::*;
+    use crate::Charset;
 
     #[test]
-    fn near_overflow() {
+    fn happy_flow() {
+        let charset = Charset::case_sensitive("aBcD");
+        let text = number2name(4u32 + 16, &charset);
+        assert_eq!(text, "aaa");
+    }
+
+    #[test]
+    fn range_check() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        let text = number2name(std::u32::MAX, &charset);
+        assert_eq!(text, "gkgwByLwRXTLPP");
+    }
+}
+
+#[cfg(test)]
+mod type_u32 {
+    use super::*;
+    use crate::Charset;
+
+    #[test]
+    fn happy_flow() {
+        let charset = Charset::case_sensitive("aBcD");
+        let text = number2name(4u32 + 16, &charset);
+        assert_eq!(text, "aaa");
+    }
+
+    #[test]
+    fn range_check() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        let text = number2name(std::u32::MAX, &charset);
+        assert_eq!(text, "gkgwByLwRXTLPP");
+    }
+}
+
+#[cfg(test)]
+mod type_u64 {
+    use super::*;
+    use crate::Charset;
+
+    #[test]
+    fn happy_flow() {
+        let charset = Charset::case_sensitive("aBcD");
+        let text = number2name(4u64 + 16, &charset);
+        assert_eq!(text, "aaa");
+    }
+
+    #[test]
+    fn range_check() {
         let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
         let text = number2name(std::u64::MAX, &charset);
+        assert_eq!(text, "gkgwByLwRXTLPP");
+    }
+}
+
+#[cfg(test)]
+mod type_u128 {
+    use super::*;
+    use crate::Charset;
+
+    #[test]
+    fn happy_flow() {
+        let charset = Charset::case_sensitive("aBcD");
+        let text = number2name(4u128 + 16, &charset);
+        assert_eq!(text, "aaa");
+    }
+
+    #[test]
+    fn range_check() {
+        let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+        let text = number2name(std::u128::MAX, &charset);
         assert_eq!(text, "gkgwByLwRXTLPP");
     }
 }

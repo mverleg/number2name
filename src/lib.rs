@@ -20,6 +20,10 @@ mod util;
 pub use crate::charset::Charset;
 pub use crate::decode::name2number;
 pub use crate::encode::number2name;
+pub use crate::encode::number2name_u16;
+pub use crate::encode::number2name_u32;
+pub use crate::encode::number2name_u64;
+pub use crate::encode::number2name_u128;
 pub use crate::typ::N2NErr;
 
 #[cfg(test)]

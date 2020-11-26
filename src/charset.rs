@@ -4,7 +4,7 @@ use ::std::fmt::{Formatter, Write};
 use ::std::ops::Index;
 
 use crate::decode::name2number;
-use crate::encode::number2name;
+use crate::encode::{number2name, number2name_u128, number2name_u64, number2name_u32, number2name_u16};
 use crate::typ::N2NErr;
 use crate::util::lower;
 
@@ -110,7 +110,23 @@ impl Charset {
     }
 
     pub fn encode(&self, number: u64) -> String {
-        number2name(number, &self)
+        number2name_u64(number, &self)
+    }
+
+    pub fn encode_u16(&self, number: u16) -> String {
+        number2name_u16(number, &self)
+    }
+
+    pub fn encode_u32(&self, number: u32) -> String {
+        number2name_u32(number, &self)
+    }
+
+    pub fn encode_u64(&self, number: u64) -> String {
+        number2name_u64(number, &self)
+    }
+
+    pub fn encode_u128(&self, number: u128) -> String {
+        number2name_u128(number, &self)
     }
 
     pub fn decode(&self, text: impl AsRef<str>) -> Result<u64, N2NErr> {
