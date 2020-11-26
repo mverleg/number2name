@@ -17,6 +17,26 @@ pub fn number2name(number: impl Into<u64>, charset: &Charset) -> String {
     name.into_iter().map(|index| charset[index]).rev().collect()
 }
 
+macro_rules! number2name_for_type {
+    ($int:ty) => {
+        pub fn number2name$int(number: impl Into<$int>, charset: &Charset) -> String {
+            let size = charset.len() as $int;
+            let mut remainder = number.into();
+            let mut name = Vec::new();
+            loop {
+                let index = remainder % size;
+                name.push(index as usize);
+                remainder /= size;
+                if remainder == 0 {
+                    break;
+                }
+                remainder -= 1;
+            }
+            name.into_iter().map(|index| charset[index]).rev().collect()
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

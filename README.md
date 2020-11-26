@@ -25,7 +25,7 @@ Install
 
 `Cargo.toml`:
 
-    number2name = "^1.0.0"
+    number2name = "^1.0.1"
 
 Encoding
 -------------------------------
@@ -61,7 +61,7 @@ Character sets
 
 You can easily use your own character sets using `number2name::Charset`.
 
-Or use one of the built-in ones:
+Or use one of the built-in ones (make sure to import from this library, e.g. `use ::number2name::BASE64`):
 
 * **HEX** (case-insensitive) / **HEXLOWERCASE** (case-sensitive)
 
@@ -94,7 +94,11 @@ Or use one of the built-in ones:
 * **BASE64URL** (case-sensitive)
 
     ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_
-    
+
+Mini version
+-------------------------------    
+
+If filesize (or compile time) is important, you can build this libary without any dependencies using at all, using `--no-default-features`. This means the built-in charsets are not available, you will need to construct your own (described above).
 
 Notes
 -------------------------------

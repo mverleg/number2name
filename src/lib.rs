@@ -1,3 +1,5 @@
+
+#[cfg(feature = "builtin-charsets")]
 mod builtin;
 mod charset;
 mod decode;
@@ -5,16 +7,16 @@ mod encode;
 mod typ;
 mod util;
 
-pub use crate::builtin::BASE32;
-pub use crate::builtin::BASE32CROCKFORD;
-pub use crate::builtin::BASE32HEX;
-pub use crate::builtin::BASE32HUMAN;
-pub use crate::builtin::BASE32LOWERCASE;
-pub use crate::builtin::BASE32SCNY;
-pub use crate::builtin::BASE64;
-pub use crate::builtin::BASE64URL;
-pub use crate::builtin::HEX;
-pub use crate::builtin::HEXLOWERCASE;
+#[cfg(feature = "builtin-charsets")] pub use crate::builtin::BASE32;
+#[cfg(feature = "builtin-charsets")] pub use crate::builtin::BASE32CROCKFORD;
+#[cfg(feature = "builtin-charsets")] pub use crate::builtin::BASE32HEX;
+#[cfg(feature = "builtin-charsets")] pub use crate::builtin::BASE32HUMAN;
+#[cfg(feature = "builtin-charsets")] pub use crate::builtin::BASE32LOWERCASE;
+#[cfg(feature = "builtin-charsets")] pub use crate::builtin::BASE32SCNY;
+#[cfg(feature = "builtin-charsets")] pub use crate::builtin::BASE64;
+#[cfg(feature = "builtin-charsets")] pub use crate::builtin::BASE64URL;
+#[cfg(feature = "builtin-charsets")] pub use crate::builtin::HEX;
+#[cfg(feature = "builtin-charsets")] pub use crate::builtin::HEXLOWERCASE;
 pub use crate::charset::Charset;
 pub use crate::decode::name2number;
 pub use crate::encode::number2name;
