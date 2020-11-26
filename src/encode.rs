@@ -21,7 +21,7 @@ macro_rules! number2name_for_type {
     }
 }
 
-number2name_for_type!(number2name_u16, u32);
+number2name_for_type!(number2name_u16, u16);
 number2name_for_type!(number2name_u32, u32);
 number2name_for_type!(number2name_u64, u64);
 number2name_for_type!(number2name_u128, u128);

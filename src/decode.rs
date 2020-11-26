@@ -1,50 +1,82 @@
 use crate::typ::N2NErr;
-use crate::Charset;
+use crate::{Charset, unsigned2signed_16, unsigned2signed_32, unsigned2signed_64, unsigned2signed_128, number2name_u64};
 
-/// Convert a string encoded using the given charset back to the number it represents.
-pub fn name2number(text: impl AsRef<str>, charset: &Charset) -> Result<u64, N2NErr> {
-    let text = text.as_ref();
-    let size = charset.len() as u64;
-    // Handle the first letter separately
-    let mut number = if let Some(first_char) = text.chars().rev().next() {
-        get_index(first_char, charset)?
-    } else {
-        return Err(N2NErr::EmptyInput);
-    };
-    // Handle the other letters, with special case for near-overflow
-    let mut scale: u64 = 1;
-    for character in text.chars().rev().skip(1) {
-        let value = get_index(character, charset)?;
-        match scale.checked_mul(size) {
-            Some(new_scale) => {
-                scale = new_scale;
-                number = match number.checked_add((value + 1) * scale) {
-                    Some(n) => n,
+macro_rules! name2number_for_type {
+    ($name: ident, $int:ty) => {
+        /// Convert a string encoded using the given charset back to the number it represents.
+        pub fn $name(text: impl AsRef<str>, charset: &Charset) -> Result<$int, N2NErr> {
+            fn get_index(character: char, charset: &Charset) -> Result<$int, N2NErr> {
+                match charset.index_of(character) {
+                    Ok(i) => Ok(i),
+                    Err(()) => Err(N2NErr::InvalidCharacter {
+                        character,
+                        charset: charset.clone(),
+                    }),
+                }
+            }
+
+            let text = text.as_ref();
+            let size = charset.len() as $int;
+            // Handle the first letter separately
+            let mut number = if let Some(first_char) = text.chars().rev().next() {
+                get_index(first_char, charset)?
+            } else {
+                return Err(N2NErr::EmptyInput);
+            };
+            // Handle the other letters, with special case for near-overflow
+            let mut scale: $int = 1;
+            for character in text.chars().rev().skip(1) {
+                let value = get_index(character, charset)?;
+                match scale.checked_mul(size) {
+                    Some(new_scale) => {
+                        scale = new_scale;
+                        number = match number.checked_add((value + 1) * scale) {
+                            Some(n) => n,
+                            None => {
+                                return Err(N2NErr::TooLarge {
+                                    charset: charset.clone(),
+                                })
+                            }
+                        }
+                    }
                     None => {
                         return Err(N2NErr::TooLarge {
                             charset: charset.clone(),
                         })
                     }
-                }
+                };
             }
-            None => {
-                return Err(N2NErr::TooLarge {
-                    charset: charset.clone(),
-                })
-            }
-        };
+            Ok(number)
+        }
     }
-    Ok(number)
 }
 
-fn get_index(character: char, charset: &Charset) -> Result<u64, N2NErr> {
-    match charset.index_of(character) {
-        Ok(i) => Ok(i),
-        Err(()) => Err(N2NErr::InvalidCharacter {
-            character,
-            charset: charset.clone(),
-        }),
-    }
+name2number_for_type!(name2number_u16, u16);
+name2number_for_type!(name2number_u32, u32);
+name2number_for_type!(name2number_u64, u64);
+name2number_for_type!(name2number_u128, u128);
+
+//TODO @mark: tests for different types?
+
+pub fn name2number_i16(text: impl AsRef<str>, charset: &Charset) -> Result<u16, N2NErr> {
+    name2number_u16(unsigned2signed_16(text.as_ref()), charset)
+}
+
+pub fn name2number_i32(text: impl AsRef<str>, charset: &Charset) -> Result<u32, N2NErr> {
+    name2number_u32(unsigned2signed_32(text.as_ref()), charset)
+}
+
+pub fn name2number_i64(text: impl AsRef<str>, charset: &Charset) -> Result<u64, N2NErr> {
+    name2number_u64(unsigned2signed_64(text.as_ref()), charset)
+}
+
+pub fn name2number_i128(text: impl AsRef<str>, charset: &Charset) -> Result<u128, N2NErr> {
+    name2number_u128(unsigned2signed_128(text.as_ref()), charset)
+}
+
+/// Convert a string encoded using the given charset back to the number it represents.
+pub fn name2number(text: impl AsRef<str>, charset: &Charset) -> Result<u64, N2NErr> {
+    name2number_u64(text, charset)
 }
 
 #[cfg(test)]
