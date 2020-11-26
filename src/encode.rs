@@ -140,7 +140,6 @@ mod type_u16 {
         let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
         let text = number2name_u16(std::u16::MAX, &charset);
         assert_eq!(text, "cRXP");
-        //TODO @mark: verify
     }
 }
 
@@ -161,7 +160,6 @@ mod type_u32 {
         let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
         let text = number2name_u32(std::u32::MAX, &charset);
         assert_eq!(text, "mwLqkwV");
-        //TODO @mark: verify
     }
 }
 

@@ -6,6 +6,7 @@ mod decode;
 mod encode;
 mod typ;
 mod util;
+mod signs;
 
 #[cfg(feature = "builtin-charsets")] pub use crate::builtin::BASE32;
 #[cfg(feature = "builtin-charsets")] pub use crate::builtin::BASE32CROCKFORD;
