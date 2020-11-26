@@ -111,6 +111,20 @@ These can be given a series of numbers or strings respectively, and convert them
 
 You can specify a charset (with `-c`, default is base32 human readable). You can use signed numbers (with `-s`).
 
+Docker
+-------------------------------
+
+Run the CLI utils with Docker:
+
+    docker run --rm -it mverleg/number2name /number2name 8992605869540
+    docker run --rm -it mverleg/number2name /name2number "hey_there"
+
+To build the image yourself (instead of downloading from Dockerhub), clone the Github project and run:
+
+    docker build -t mverleg/number2name .
+
+This is also the easiest way to run the tests and lints, to verify that your version is okay.
+
 Mini version
 ------------------------------- 
 
