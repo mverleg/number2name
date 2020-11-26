@@ -99,13 +99,22 @@ Integer types
 ------------------------------- 
 
 * The default method works on 64 bit unsigned integers.
-* Some other unsigned types are available as e.g. `charset.encode_u128(...)`. 
-* Signed integers are currently not supported (PRs welcome).
+* Specific unsigned types are available as e.g. `charset.encode_u128(...)`. 
+* Signed integer types are available as e.g. `charset.encode_i32(...)`.
+
+Binaries
+-------------------------------
+
+While primarily intended as a library, this project also comes with two binaries: `number2name` and `name2number`.
+
+These can be given a series of numbers or strings respectively, and convert them in the matching strings or numbers.
+
+You can specify a charset (with `-c`), and can use signed numbers (with `-s`).
 
 Mini version
 ------------------------------- 
 
-If filesize (or compile time) is important, you can build this libary without any dependencies using at all, using `--no-default-features`. This means the built-in charsets are not available, you will need to construct your own (described above).
+If filesize (or compile time) is important, you can build this libary without any dependencies using at all, using `--no-default-features`. This means the built-in charsets are not available, you will need to construct your own (described above). You also can't use the binaries this way, only the library.
 
 Notes
 -------------------------------

@@ -27,17 +27,17 @@ pub struct Name2NrArgs {
     #[structopt(
         short = "c",
         long,
-        default_value = "BASE64URL",
+        default_value = "BASE32HUMAN",
         help = "Which character set to use, either name or quoted string"
     )]
     charset: String,
 
     #[structopt(
-        short = "u",
+        short = "s",
         long,
-        help = "Use unsigned encoding instead of signed"
+        help = "Use signed decoding instead of unsigned (has to match the option used when encoding)"
     )]
-    unsigned: bool,
+    signed: bool,
 }
 
 pub fn main() {
@@ -54,13 +54,13 @@ fn go(args: &Name2NrArgs) -> Result<(), String> {
     let charset = charset_by_identifier(&args.charset);
 
     for name in &args.names {
-        if args.unsigned {
-            //TODO @mark: u128
+        if args.signed {
+            //TODO @mark: i128
             let nr = name2number(name, &charset)
                 .map_err(|err| err.to_string())?;
             println!("{}", nr);
         } else {
-            //TODO @mark: i128
+            //TODO @mark: u128
             let nr = name2number(name, &charset)
                 .map_err(|err| err.to_string())?;
             println!("{}", nr);

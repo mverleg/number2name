@@ -5,7 +5,6 @@ use ::std::process::exit;
 use ::structopt::StructOpt;
 
 use ::number2name::{number2name_i128, number2name_u128};
-use ::number2name::name2number;
 
 use crate::cli_util::charset_by_identifier;
 
@@ -29,17 +28,17 @@ pub struct Nr2NameArgs {
     #[structopt(
         short = "c",
         long,
-        default_value = "BASE64URL",
+        default_value = "BASE32HUMAN",
         help = "Which character set to use, either name or quoted string"
     )]
     charset: String,
 
     #[structopt(
-        short = "u",
+        short = "s",
         long,
-        help = "Use unsigned encoding instead of signed"
+        help = "Use signed encoding instead of unsigned (supporting negative numbers)"
     )]
-    unsigned: bool,
+    signed: bool,
 }
 
 pub fn main() {
@@ -56,16 +55,16 @@ fn go(args: &Nr2NameArgs) -> Result<(), String> {
     let charset = charset_by_identifier(&args.charset);
 
     for nr_txt in &args.names {
-        if args.unsigned {
-            //TODO @mark: u128
-            let nr = number2name_u128(nr_txt, &charset)
-                .map_err(|err| err.to_string())?;
-            println!("{}", nr);
+        if args.signed {
+            let nr: i128 = nr_txt.parse()
+                .map_err(|_| format!("The input '{}' was not recognized as a valid number", &nr_txt))?;
+            let txt = number2name_i128(nr, &charset);
+            println!("{}", txt);
         } else {
-            //TODO @mark: i128
-            let nr = number2name_u128(nr_txt, &charset)
-                .map_err(|err| err.to_string())?;
-            println!("{}", nr);
+            let nr: u128 = nr_txt.parse()
+                .map_err(|_| format!("The input '{}' was not recognized as a valid unsigned number", &nr_txt))?;
+            let txt = number2name_u128(nr, &charset);
+            println!("{}", txt);
         }
     }
 
