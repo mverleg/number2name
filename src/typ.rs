@@ -8,7 +8,7 @@ pub enum N2NErr {
 }
 
 impl N2NErr {
-    pub fn to_string(&self) -> String {
+    pub fn as_string(&self) -> String {
         match self {
             N2NErr::EmptyInput => "input was empty while decoding".to_owned(),
             N2NErr::TooLarge { charset } => format!(
@@ -25,6 +25,6 @@ impl N2NErr {
 
 impl Into<String> for N2NErr {
     fn into(self) -> String {
-        self.to_string()
+        self.as_string()
     }
 }

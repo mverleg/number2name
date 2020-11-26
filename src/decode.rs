@@ -7,8 +7,8 @@ macro_rules! name2number_for_type {
         pub fn $name(text: impl AsRef<str>, charset: &Charset) -> Result<$int, N2NErr> {
             fn get_index(character: char, charset: &Charset) -> Result<u64, N2NErr> {
                 match charset.index_of(character) {
-                    Ok(i) => Ok(i as u64),
-                    Err(()) => Err(N2NErr::InvalidCharacter {
+                    Some(i) => Ok(i as u64),
+                    None => Err(N2NErr::InvalidCharacter {
                         character,
                         charset: charset.clone(),
                     }),

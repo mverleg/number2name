@@ -24,7 +24,7 @@ pub fn charset_by_identifier(identifier: &str) -> Result<Charset, String> {
         "BASE64URL" => BASE64URL.clone(),
         _ => {
             let mut literal = identifier;
-            if literal.starts_with("'") || literal.starts_with("\"") {
+            if literal.starts_with('\'') || literal.starts_with('"') {
                 literal = &literal[1..literal.len()-1]
             } else {
                 eprintln!("Charset '{}' was not a built-in identifier and was not quoted; \
