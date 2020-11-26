@@ -29,7 +29,7 @@ pub struct Nr2NameArgs {
         short = "c",
         long,
         default_value = "BASE32HUMAN",
-        help = "Which character set to use, either name or quoted string"
+        help = "Which (case-sensitive) character set to use, either name or quoted string"
     )]
     charset: String,
 
@@ -52,7 +52,7 @@ pub fn main() {
 
 fn go(args: &Nr2NameArgs) -> Result<(), String> {
 
-    let charset = charset_by_identifier(&args.charset);
+    let charset = charset_by_identifier(&args.charset)?;
 
     for nr_txt in &args.names {
         if args.signed {

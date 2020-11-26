@@ -2,12 +2,13 @@ use ::std::io::stderr;
 use ::std::io::Write;
 use ::std::process::exit;
 
-use ::number2name::name2number;
 use ::structopt::StructOpt;
 
-mod cli_util;
+use ::number2name::name2number;
 
 use crate::cli_util::charset_by_identifier;
+
+mod cli_util;
 
 #[derive(Debug, StructOpt)]
 #[structopt(
@@ -28,7 +29,7 @@ pub struct Name2NrArgs {
         short = "c",
         long,
         default_value = "BASE32HUMAN",
-        help = "Which character set to use, either name or quoted string"
+        help = "Which (case-sensitive) character set to use, either name or quoted string"
     )]
     charset: String,
 
@@ -51,7 +52,7 @@ pub fn main() {
 
 fn go(args: &Name2NrArgs) -> Result<(), String> {
 
-    let charset = charset_by_identifier(&args.charset);
+    let charset = charset_by_identifier(&args.charset)?;
 
     for name in &args.names {
         if args.signed {

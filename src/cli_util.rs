@@ -22,13 +22,17 @@ pub fn charset_by_identifier(identifier: &str) -> Result<Charset, String> {
         "BASE32HEX" => BASE32HEX.clone(),
         "BASE64" => BASE64.clone(),
         "BASE64URL" => BASE64URL.clone(),
-        mut literal => {
+        _ => {
+            let mut literal = identifier;
             if literal.starts_with("'") || literal.starts_with("\"") {
-                literal = literal[literal..literal.len()-1]
+                literal = &literal[1..literal.len()-1]
             } else {
-                return Err(format!("Charset '{}' was not a built-in identifier and was not quoted; if you are providing a literal character set, enclose it in quotes (')", &literal))
+                eprintln!("Charset '{}' was not a built-in identifier and was not quoted; \
+                it will be treated as a literal set of characters, but it is recommended that \
+                you enclose it in quotes ('), so it is never interpreted as a name of a charset\
+                (you may need \"'..'\" because the shell strips the outer quotes)", &literal)
             }
-            unimplemented!()
+            Charset::case_sensitive(literal)
         }
     })
 }
