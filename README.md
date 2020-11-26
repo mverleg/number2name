@@ -109,7 +109,7 @@ While primarily intended as a library, this project also comes with two binaries
 
 These can be given a series of numbers or strings respectively, and convert them in the matching strings or numbers.
 
-You can specify a charset (with `-c`), and can use signed numbers (with `-s`).
+You can specify a charset (with `-c`, default is base32 human readable). You can use signed numbers (with `-s`).
 
 Mini version
 ------------------------------- 
