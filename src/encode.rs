@@ -131,15 +131,16 @@ mod type_u16 {
     #[test]
     fn happy_flow() {
         let charset = Charset::case_sensitive("aBcD");
-        let text = number2name(4u32 + 16, &charset);
+        let text = number2name_u16(4u16 + 16, &charset);
         assert_eq!(text, "aaa");
     }
 
     #[test]
     fn range_check() {
         let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
-        let text = number2name(std::u32::MAX, &charset);
-        assert_eq!(text, "gkgwByLwRXTLPP");
+        let text = number2name_u16(std::u16::MAX, &charset);
+        assert_eq!(text, "cRXP");
+        //TODO @mark: verify
     }
 }
 
@@ -151,15 +152,16 @@ mod type_u32 {
     #[test]
     fn happy_flow() {
         let charset = Charset::case_sensitive("aBcD");
-        let text = number2name(4u32 + 16, &charset);
+        let text = number2name_u32(4u32 + 16, &charset);
         assert_eq!(text, "aaa");
     }
 
     #[test]
     fn range_check() {
         let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
-        let text = number2name(std::u32::MAX, &charset);
-        assert_eq!(text, "gkgwByLwRXTLPP");
+        let text = number2name_u32(std::u32::MAX, &charset);
+        assert_eq!(text, "mwLqkwV");
+        //TODO @mark: verify
     }
 }
 
@@ -171,14 +173,14 @@ mod type_u64 {
     #[test]
     fn happy_flow() {
         let charset = Charset::case_sensitive("aBcD");
-        let text = number2name(4u64 + 16, &charset);
+        let text = number2name_u64(4u64 + 16, &charset);
         assert_eq!(text, "aaa");
     }
 
     #[test]
     fn range_check() {
         let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
-        let text = number2name(std::u64::MAX, &charset);
+        let text = number2name_u64(std::u64::MAX, &charset);
         assert_eq!(text, "gkgwByLwRXTLPP");
     }
 }
@@ -191,14 +193,14 @@ mod type_u128 {
     #[test]
     fn happy_flow() {
         let charset = Charset::case_sensitive("aBcD");
-        let text = number2name(4u128 + 16, &charset);
+        let text = number2name_u128(4u128 + 16u128, &charset);
         assert_eq!(text, "aaa");
     }
 
     #[test]
     fn range_check() {
         let charset = Charset::case_sensitive("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
-        let text = number2name(std::u128::MAX, &charset);
-        assert_eq!(text, "gkgwByLwRXTLPP");
+        let text = number2name_u128(std::u128::MAX, &charset);
+        assert_eq!(text, "BcgDeNLqRqwDsLRugsNLBTmFiJaV");
     }
 }
