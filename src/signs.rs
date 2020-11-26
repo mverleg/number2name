@@ -12,12 +12,13 @@ macro_rules! signed2unsigned_for_type {
         }
 
         pub fn $nameu2s(number: $trgt) -> $src {
+            let half = (number / 2) as $src;
             if number % 2 == 0 {
                 // Even numbers are positive
-                (number as $trgt) as $src / 2
+                half
             } else {
                 // Odd numbers are negative
-                (-(((number - 1) / 2) as $src)) - 1
+                (-half) - 1
             }
         }
 
@@ -26,9 +27,8 @@ macro_rules! signed2unsigned_for_type {
             use super::*;
 
             #[test]
-            fn zero() {
+            fn zero_s2u() {
                 assert_eq!($names2u(0), 0);
-                assert_eq!($nameu2s(0), 0);
             }
 
             #[test]
@@ -43,6 +43,25 @@ macro_rules! signed2unsigned_for_type {
                 assert_eq!($names2u(-1), 1);
                 assert_eq!($names2u(-15), 29);
                 assert_eq!($names2u(-1234), 2467);
+            }
+
+            #[test]
+            fn zero_u2s() {
+                assert_eq!($nameu2s(0), 0);
+            }
+
+            #[test]
+            fn positive_u2s() {
+                assert_eq!($nameu2s(2), 1);
+                assert_eq!($nameu2s(30), 15);
+                assert_eq!($nameu2s(2468), 1234);
+            }
+
+            #[test]
+            fn negative_u2s() {
+                assert_eq!($nameu2s(1), -1);
+                assert_eq!($nameu2s(29), -15);
+                assert_eq!($nameu2s(2467), -1234);
             }
         }
     }
@@ -83,11 +102,13 @@ mod type_16_range {
     #[test]
     fn maximum() {
         assert_eq!(signed2unsigned_16(::std::i16::MAX), ::std::u16::MAX - 1);
+        assert_eq!(unsigned2signed_16(::std::u16::MAX - 1), ::std::i16::MAX);
     }
 
     #[test]
     fn minimum() {
         assert_eq!(signed2unsigned_16(::std::i16::MIN), ::std::u16::MAX);
+        assert_eq!(unsigned2signed_16(::std::u16::MAX), ::std::i16::MIN);
     }
 }
 
@@ -98,11 +119,13 @@ mod type_32_range {
     #[test]
     fn maximum() {
         assert_eq!(signed2unsigned_32(::std::i32::MAX), ::std::u32::MAX - 1);
+        assert_eq!(unsigned2signed_32(::std::u32::MAX - 1), ::std::i32::MAX);
     }
 
     #[test]
     fn minimum() {
         assert_eq!(signed2unsigned_32(::std::i32::MIN), ::std::u32::MAX);
+        assert_eq!(unsigned2signed_32(::std::u32::MAX), ::std::i32::MIN);
     }
 }
 
@@ -113,11 +136,13 @@ mod type_64_range {
     #[test]
     fn maximum() {
         assert_eq!(signed2unsigned_64(::std::i64::MAX), ::std::u64::MAX - 1);
+        assert_eq!(unsigned2signed_64(::std::u64::MAX - 1), ::std::i64::MAX);
     }
 
     #[test]
     fn minimum() {
         assert_eq!(signed2unsigned_64(::std::i64::MIN), ::std::u64::MAX);
+        assert_eq!(unsigned2signed_64(::std::u64::MAX), ::std::i64::MIN);
     }
 }
 
@@ -128,10 +153,12 @@ mod type_128_range {
     #[test]
     fn maximum() {
         assert_eq!(signed2unsigned_128(::std::i128::MAX), ::std::u128::MAX - 1);
+        assert_eq!(unsigned2signed_128(::std::u128::MAX - 1), ::std::i128::MAX);
     }
 
     #[test]
     fn minimum() {
         assert_eq!(signed2unsigned_128(::std::i128::MIN), ::std::u128::MAX);
+        assert_eq!(unsigned2signed_128(::std::u128::MAX), ::std::i128::MIN);
     }
 }
