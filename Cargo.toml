@@ -34,7 +34,7 @@ default = ["builtin-charsets", "cli"]
 
 [dependencies]
 lazy_static = { version= "^1.4.0", optional = true }
-structopt = { version = "^0.3.20", optional = true }
+structopt = { version = "^0.3.21", optional = true }
 
 [dev-dependencies]
 criterion = "^0.3.3"
