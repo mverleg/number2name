@@ -8,7 +8,7 @@ repository = "https://github.com/mverleg/number2name"
 readme = "README.md"
 license = "BSD-3-Clause"
 keywords = ["encoding", "decoding"]
-edition = "2018"
+edition = "2021"
 
 [lib]
 name = "number2name"
